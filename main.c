@@ -7,6 +7,7 @@ void printMenu();
 void enterExpenses();
 void printDateChoice();
 char *getDate();
+char *chooseDate();
 int main()
 {
     
@@ -77,11 +78,12 @@ void printDateChoice() {
     switch (choice)
     {
     case 1:
-        char *date = getDate();
-        printf("Today is %s\n", date);
+        char *today = getDate();
+        printf("Today is %s\n", today);
         break;
     case 2:
-        printf("Other\n");
+        char *notToday = chooseDate();
+        printf("You choose %s\n", notToday);
         break;
     default:
         printf("Invalid choice\n");
@@ -101,9 +103,23 @@ char *getDate() {
 
     time(&rawtime);
     info = localtime(&rawtime);
-    strftime(buffer, 80, "%x", info);
+    strftime(buffer, 80, "%d/%m/%Y", info);
 
     return buffer;
+}
+
+char *chooseDate() {
+    char *date = (char *)malloc(80 * sizeof(char)); // Allocate dynamic memory
+
+    if (date == NULL) {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Enter date (dd/mm/yyyy): ");
+    scanf("%s", date);
+
+    return date;
 }
 
 
