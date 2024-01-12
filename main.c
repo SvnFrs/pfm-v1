@@ -95,8 +95,8 @@ void printDateChoice() {
     case 1:
         char *today = getDate();
         printf("Today is %s\n", today);
-        strcpy(expense.date, today);
-        // snprintf(expense.date, sizeof(expense.date), "%s", today);
+        // strcpy(expense.date, today);
+        snprintf(expense.date, sizeof(expense.date), "%s", today);
         free(today);
         break;
     case 2:
