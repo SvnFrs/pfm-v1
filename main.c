@@ -8,6 +8,15 @@ void enterExpenses();
 void printDateChoice();
 char *getDate();
 char *chooseDate();
+
+struct Expense
+{
+    char date[80];
+    char category[80];
+    char description[80];
+    long amount;
+} expense;
+
 int main()
 {
     
@@ -42,14 +51,17 @@ int main()
             printf("Statistic total expenses\n");
             break;
         case 4:
-            printf("Exit\n");
+            printf("Options\n");
+            break;
+        case 5:
+            printf("Thank you for using our software\n");
             break;
         default:
             printf("Invalid choice\n");
             invalidChoice = 1;
             break;
         }
-    } while (choice > 4 || invalidChoice == 1);
+    } while (choice > 5 || invalidChoice == 1);
 
     return 0;
 }
@@ -60,12 +72,14 @@ void printMenu()
     printf("1. Enter expenses\n");
     printf("2. List expenses\n");
     printf("3. Statistic total expenses\n");
-    printf("4. Exit\n");
+    printf("4. Options\n");
+    printf("5. Exit\n");
 }
 
 
 void enterExpenses() {
     printDateChoice();
+    printf("Expense date: %s\n", expense.date);
 
 }
 void printDateChoice() {
@@ -80,10 +94,14 @@ void printDateChoice() {
     case 1:
         char *today = getDate();
         printf("Today is %s\n", today);
+        snprintf(expense.date, sizeof(expense.date), "%s", today);
+        free(today);
         break;
     case 2:
         char *notToday = chooseDate();
         printf("You choose %s\n", notToday);
+        snprintf(expense.date, sizeof(expense.date), "%s", notToday);
+        free(notToday);
         break;
     default:
         printf("Invalid choice\n");
@@ -106,6 +124,7 @@ char *getDate() {
     strftime(buffer, 80, "%d/%m/%Y", info);
 
     return buffer;
+    free(buffer);
 }
 
 char *chooseDate() {
