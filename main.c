@@ -7,9 +7,11 @@ void printMenu();
 // int fun(char date[]);
 void enterExpenses();
 void printDateChoice();
+void printExpenseAmount();
 void printCategoryChoice();
 char *getDate();
 char *chooseDate();
+int saveExpense();
 
 struct Expense
 {
@@ -81,9 +83,12 @@ void printMenu()
 
 void enterExpenses() {
     printDateChoice();
-    printf("Expense date: %s\n", expense.date);
+    printExpenseAmount();
     printCategoryChoice();
+    printf("Expense date: %s\n", expense.date);
+    printf("Expense amount: %ld\n", expense.amount);
     printf("Expense category: %s\n", expense.category);
+    saveExpense();   
 }
 void printDateChoice() {
     printf("What day should it be?\n");
@@ -114,11 +119,17 @@ void printDateChoice() {
     }
 }
 
+void printExpenseAmount() {
+    printf("Enter expense amount: ");
+    scanf("%ld", &expense.amount);
+    printf("Expense amount: %ld\n", expense.amount);
+}
+
 void printCategoryChoice() {
     printf("Choose category\n");
     printf("1. Food\n");
     printf("2. Transportation\n");
-    printf("3. Education\n");
+    printf("3. Housing\n");
     printf("4. Entertainment\n");
     printf("5. Other\n");
     printf("Your choice:");
@@ -135,8 +146,8 @@ void printCategoryChoice() {
         strcpy(expense.category, "Transportation");
         break;
     case 3:
-        printf("You choose Education\n");
-        strcpy(expense.category, "Education");
+        printf("You choose Housing\n");
+        strcpy(expense.category, "Housing");
         break;
     case 4:
         printf("You choose Entertainment\n");
@@ -182,6 +193,29 @@ char *chooseDate() {
     scanf("%s", date);
 
     return date;
+}
+
+int saveExpense() {
+    cJSON *json = cJSON_CreateObject();
+    cJSON_AddStringToObject(json, "Date", expense.date);
+    cJSON_AddStringToObject(json, "Category", expense.category);
+    cJSON_AddNumberToObject(json, "Amount", expense.amount);
+    char *json_str = cJSON_Print(json);
+
+    // write the JSON string to a file
+    FILE *fp = fopen("data/expenses.json", "w");
+    if (fp == NULL)
+    {
+        printf("Error: Unable to open the file.\n");
+        return 1;
+    }
+    printf("%s\n", json_str);
+    fputs(json_str, fp);
+    fclose;
+    // free the JSON string and cJSON object
+    cJSON_free(json_str);
+    cJSON_Delete(json);
+    return 0;
 }
 
 // int fun(char date[])
