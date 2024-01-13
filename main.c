@@ -7,6 +7,7 @@ void printMenu();
 // int fun(char date[]);
 void enterExpenses();
 void printDateChoice();
+void printCategoryChoice();
 char *getDate();
 char *chooseDate();
 
@@ -81,7 +82,8 @@ void printMenu()
 void enterExpenses() {
     printDateChoice();
     printf("Expense date: %s\n", expense.date);
-
+    printCategoryChoice();
+    printf("Expense category: %s\n", expense.category);
 }
 void printDateChoice() {
     printf("What day should it be?\n");
@@ -94,6 +96,7 @@ void printDateChoice() {
     {
     case 1:
         char *today = getDate();
+        
         printf("Today is %s\n", today);
         // strcpy(expense.date, today);
         snprintf(expense.date, sizeof(expense.date), "%s", today);
@@ -104,6 +107,44 @@ void printDateChoice() {
         printf("You choose %s\n", notToday);
         snprintf(expense.date, sizeof(expense.date), "%s", notToday);
         free(notToday);
+        break;
+    default:
+        printf("Invalid choice\n");
+        break;
+    }
+}
+
+void printCategoryChoice() {
+    printf("Choose category\n");
+    printf("1. Food\n");
+    printf("2. Transportation\n");
+    printf("3. Education\n");
+    printf("4. Entertainment\n");
+    printf("5. Other\n");
+    printf("Your choice:");
+    int choice;
+    scanf("%d", &choice);
+    switch (choice)
+    {
+    case 1:
+        printf("You choose Food\n");
+        strcpy(expense.category, "Food");
+        break;
+    case 2:
+        printf("You choose Transportation\n");
+        strcpy(expense.category, "Transportation");
+        break;
+    case 3:
+        printf("You choose Education\n");
+        strcpy(expense.category, "Education");
+        break;
+    case 4:
+        printf("You choose Entertainment\n");
+        strcpy(expense.category, "Entertainment");
+        break;
+    case 5:
+        printf("You choose Other\n");
+        strcpy(expense.category, "Other");
         break;
     default:
         printf("Invalid choice\n");
@@ -142,7 +183,6 @@ char *chooseDate() {
 
     return date;
 }
-
 
 // int fun(char date[])
 // {
