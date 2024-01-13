@@ -9,6 +9,7 @@ void enterExpenses();
 void printDateChoice();
 void printExpenseAmount();
 void printCategoryChoice();
+void separateDate(char date[]);
 char *getDate();
 char *chooseDate();
 int saveExpense();
@@ -88,7 +89,8 @@ void enterExpenses() {
     printf("Expense date: %s\n", expense.date);
     printf("Expense amount: %ld\n", expense.amount);
     printf("Expense category: %s\n", expense.category);
-    saveExpense();   
+    separateDate(expense.date);
+    // saveExpense();   
 }
 void printDateChoice() {
     printf("What day should it be?\n");
@@ -217,6 +219,30 @@ int saveExpense() {
     cJSON_Delete(json);
     return 0;
 }
+
+void separateDate(char date[]) {
+    char *token = strtok(date, "/");
+    while (token != NULL) {
+        printf("%s\n", token);
+        token = strtok(NULL, "/");
+    }
+}
+
+// {
+//   "2024": {
+//     "January": {
+//       "1": {"expenses": [10, 20]},
+//       "2": {"expenses": [15, 25]},
+//       // ... other days
+//     },
+//     "February": {
+//       // ... days and expenses
+//     },
+//     // ... other months
+//   }
+// }
+
+
 
 // int fun(char date[])
 // {
