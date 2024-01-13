@@ -22,6 +22,15 @@ struct Expense
     long amount;
 } expense;
 
+struct Date
+{
+    char day[80];
+    char month[80];
+    char year[80];
+} date;
+
+const char * months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+
 int main()
 {
     
