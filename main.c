@@ -99,6 +99,9 @@ void enterExpenses() {
     printf("Expense amount: %ld\n", expense.amount);
     printf("Expense category: %s\n", expense.category);
     separateDate(expense.date);
+    printf("Day: %s\n", date.day);
+    printf("Month: %s\n", date.month);
+    printf("Year: %s\n", date.year);
     // saveExpense();   
 }
 void printDateChoice() {
@@ -229,11 +232,19 @@ int saveExpense() {
     return 0;
 }
 
-void separateDate(char date[]) {
-    char *token = strtok(date, "/");
+void separateDate(char input[]) {
+    char *token = strtok(input, "/");
+    int count = 0;
     while (token != NULL) {
-        printf("%s\n", token);
+        if (count == 0) {
+            strcpy(date.day, token);
+        } else if (count == 1) {
+            strcpy(date.month, token);
+        } else if (count == 2) {
+            strcpy(date.year, token);
+        }
         token = strtok(NULL, "/");
+        count++;
     }
 }
 
