@@ -2,11 +2,14 @@
   "2024": {
     "January": {
       "01": {
-		"expenses": {
-			"ex1": {
-				"amount": 0,
-				"category": "none",
-				"description": "none"
-			}}}}
+        "expenses": {
+          "ex1": {
+            "amount": 0,
+            "category": "none",
+            "description": "none"
+          }
+        }
+      }
+    }
   }
 }
