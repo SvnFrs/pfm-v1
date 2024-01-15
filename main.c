@@ -6,6 +6,7 @@
 void printMenu();
 // int fun(char date[]);
 void enterExpenses();
+void listExpenses();
 void printDateChoice();
 void printExpenseAmount();
 void printCategoryChoice();
@@ -60,6 +61,7 @@ int main()
             break;
         case 2:
             printf("List expenses\n");
+            listExpenses();
             break;
         case 3:
             printf("Statistic total expenses\n");
@@ -246,6 +248,10 @@ void separateDate(char input[]) {
         token = strtok(NULL, "/");
         count++;
     }
+}
+
+void listExpenses() {
+
 }
 
 // {
