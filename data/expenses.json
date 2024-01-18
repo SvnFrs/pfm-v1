@@ -1,7 +1,7 @@
 {
-  "2024": {
-    "January": {
-      "01": {
+  "year_2024": {
+    "month_January": {
+      "day_01": {
         "expenses": {
           "ex1": {
             "amount": 0,
