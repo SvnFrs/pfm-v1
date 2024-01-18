@@ -64,9 +64,12 @@ int main()
     strcat(expense.date, "/");
     strcat(expense.date, tempYear);
 
-    // printf("Date: %s\n", expense.date);
+    printf("Date: %s\n", expense.date);
 
-    printf("Day: %s\n", date.day);
+    // printf("Day: %s\n", date.day);
+
+    printf("Enter amount: ");
+    scanf("%ld", &expense.amount);
 
     printf("Enter category: ");
     scanf("%s", expense.category);
@@ -74,22 +77,13 @@ int main()
     printf("Enter description: ");
     scanf("%s", expense.description);
 
-    printf("Enter amount: ");
-    scanf("%ld", &expense.amount);
-
     cJSON_AddItemToObject(root, date.year, cJSON_CreateObject());
     cJSON_AddItemToObject(cJSON_GetObjectItem(root, date.year), date.month, cJSON_CreateObject());
-    // cJSON_AddItemToObject(cJSON_GetObjectItem(root, date.month), date.day, cJSON_CreateObject());
     cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day, cJSON_CreateObject());
-    // cJSON_AddItemToObject(cJSON_GetObjectItem(root, date.day), "expenses", cJSON_CreateObject());
     cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses", cJSON_CreateObject());
-    // cJSON_AddItemToObject(cJSON_GetObjectItem(root, "expenses"), ID, cJSON_CreateObject());
     cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID, cJSON_CreateObject());
-    // cJSON_AddItemToObject(cJSON_GetObjectItem(root, ID), "amount", cJSON_CreateNumber(expense.amount));
     cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID), "amount", cJSON_CreateNumber(expense.amount));
-    // cJSON_AddItemToObject(cJSON_GetObjectItem(root, ID), "category", cJSON_CreateString(expense.category));
     cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID), "category", cJSON_CreateString(expense.category));
-    // cJSON_AddItemToObject(cJSON_GetObjectItem(root, ID), "description", cJSON_CreateString(expense.description));
     cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID), "description", cJSON_CreateString(expense.description));
 
     char *jsonString = cJSON_Print(root);
