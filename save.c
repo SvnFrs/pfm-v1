@@ -95,4 +95,6 @@ int main()
     free(tempMonth);
     free(tempYear);
 
+    return 0;
+
 }
