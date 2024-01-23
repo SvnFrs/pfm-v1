@@ -13,6 +13,7 @@ void listExpenses();
 void printDateChoice();
 void printExpenseAmount();
 void printCategoryChoice();
+void printDescription();
 void separateDate(char date[]);
 char *getDate();
 char *chooseDate();
@@ -100,6 +101,7 @@ void enterExpenses() {
     printDateChoice();
     printExpenseAmount();
     printCategoryChoice();
+    printDescription();
     printf("Expense date: %s\n", expense.date);
     printf("Expense amount: %ld\n", expense.amount);
     printf("Expense category: %s\n", expense.category);
@@ -183,6 +185,11 @@ void printCategoryChoice() {
         printf("Invalid choice\n");
         break;
     }
+}
+
+void printDescription() {
+    printf("Enter expense description: ");
+    scanf("%s", expense.description);
 }
 
 char *getDate() {
