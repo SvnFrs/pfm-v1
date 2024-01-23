@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+// TODO : make this to be a library
+
 int main()
 {
     char *filename = "expenses.json";
