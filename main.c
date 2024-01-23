@@ -3,6 +3,9 @@
 #include <cjson/cJSON.h>
 #include <stdlib.h>
 #include <string.h>
+
+#include "testSave.h"
+
 void printMenu();
 // int fun(char date[]);
 void enterExpenses();
@@ -100,11 +103,13 @@ void enterExpenses() {
     printf("Expense date: %s\n", expense.date);
     printf("Expense amount: %ld\n", expense.amount);
     printf("Expense category: %s\n", expense.category);
+    printf("Expense description: %s\n", expense.description);
     separateDate(expense.date);
     printf("Day: %s\n", date.day);
     printf("Month: %s\n", date.month);
     printf("Year: %s\n", date.year);
     // saveExpense();   
+    testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
 }
 void printDateChoice() {
     printf("What day should it be?\n");
@@ -195,7 +200,6 @@ char *getDate() {
     strftime(buffer, 80, "%d/%m/%Y", info);
 
     return buffer;
-    free(buffer);
 }
 
 char *chooseDate() {
