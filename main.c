@@ -119,14 +119,15 @@ void printDateChoice() {
         char *today = getDate();
         
         printf("Today is %s\n", today);
-        // strcpy(expense.date, today);
-        snprintf(expense.date, sizeof(expense.date), "%s", today);
+        strcpy(expense.date, today);
+        // snprintf(expense.date, sizeof(expense.date), "%s", today);
         free(today);
         break;
     case 2:
         char *notToday = chooseDate();
         printf("You choose %s\n", notToday);
-        snprintf(expense.date, sizeof(expense.date), "%s", notToday);
+        strcpy(expense.date, notToday);
+        // snprintf(expense.date, sizeof(expense.date), "%s", notToday);
         free(notToday);
         break;
     default:
