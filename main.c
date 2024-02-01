@@ -107,9 +107,9 @@ void enterExpenses() {
     printf("Expense category: %s\n", expense.category);
     printf("Expense description: %s\n", expense.description);
     separateDate(expense.date);
-    printf("Day: %s\n", date.day);
-    printf("Month: %s\n", date.month);
-    printf("Year: %s\n", date.year);
+    // printf("Day: %s\n", date.day);
+    // printf("Month: %s\n", date.month);
+    // printf("Year: %s\n", date.year);
     // saveExpense();   
     testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
 }
@@ -221,6 +221,7 @@ char *chooseDate() {
     scanf("%s", date);
 
     return date;
+    free(date);
 }
 
 int saveExpense() {
