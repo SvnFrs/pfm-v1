@@ -26,3 +26,12 @@ int testSave(char day[80], char month[80], char year[80], char category[80], cha
 
     return 0;
 }
+
+void testPrint() {
+    FILE *fp = fopen("testExpenses.json", "r");
+    char buff[255];
+    while (fgets(buff, 255, (FILE*)fp)) {
+        printf("%s", buff);
+    }
+    fclose(fp);
+}
