@@ -1,12 +1,12 @@
 {
 	"2024":	{
 		"01":	{
-			"24":	{
+			"31":	{
 				"expenses":	{
 					"ex1":	{
-						"amount":	1,
+						"amount":	100,
 						"category":	"Food",
-						"description":	"Test"
+						"description":	"no"
 					}
 				}
 			}

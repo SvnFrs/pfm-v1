@@ -34,4 +34,6 @@ void testPrint() {
         printf("%s", buff);
     }
     fclose(fp);
+    
+    // TODO: Add a function to delete the file after the test
 }
