@@ -15,9 +15,10 @@ void createTable() {
 }
 
 void createTableHeader(int columnCount, char *columnNames[], int columnWidths[]) {
-    int padding = 2;
+    int padding = 5;
     // calculate spaces based on padding
     char spaces[padding + 1];
+
     for (int i = 0; i < padding; i++) {
         spaces[i] = ' ';
     }
@@ -35,17 +36,30 @@ void createTableHeader(int columnCount, char *columnNames[], int columnWidths[])
         }
         printf("+");
     }
+    
     printf("\n");
+    
     printf("|");
+
     for (int i = 0; i < columnCount; i++) {
         printf("%*s%s|", columnWidths[i], columnNames[i], spaces);
+    }
+    printf("\n");
+
+    printf("+");
+    
+    for (int i = 0; i < columnCount; i++) {
+        for (int j = 0; j < columnWidths[i] + padding; j++) {
+            printf("-");
+        }
+        printf("+");
     }
     printf("\n");
 
 }
 
 int main() {
-    char *columnNames[] = {"Year", "Month", "Day", "Expenses ID", "Amount", "Category", "Description"};
+    char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "Category", "Description"};
     // int columnWidths[] = {10, 10, 10, 10, 10, 10, 10};
     int columnWidths[7];
     calculateColumnWidths(7, columnNames, columnWidths);
