@@ -8,17 +8,20 @@ void createTable() {
     
 }
 
-void createTableHeader(int columnCount, char *columnNames[]) {
-    printf("Creating table with %d columns\n", columnCount);
+void createTableHeader(int columnCount, char *columnNames[], int columnWidths[]) {
+    printf("|");
     for (int i = 0; i < columnCount; i++) {
-        printf("%s\t", columnNames[i]);
+        printf("%*s|", columnWidths[i], columnNames[i]);
     }
     printf("\n");
+    
 
 }
 
 int main() {
-    char *columnNames[] = {"Name", "Hello", "World"};
-    createTableHeader(3, columnNames);
+    char *columnNames[] = {"Name", "Date", "Time"};
+    int columnWidths[] = {10, 10, 10};
+    createTableHeader(3, columnNames, columnWidths);
     return 0;
+    
 }
