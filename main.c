@@ -111,7 +111,8 @@ void enterExpenses() {
     // printf("Month: %s\n", date.month);
     // printf("Year: %s\n", date.year);
     // saveExpense();   
-    testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
+    // testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
+    saveExpense();
 }
 void printDateChoice() {
     printf("What day should it be?\n");
@@ -225,26 +226,27 @@ char *chooseDate() {
 }
 
 int saveExpense() {
-    cJSON *json = cJSON_CreateObject();
-    cJSON_AddStringToObject(json, "Date", expense.date);
-    cJSON_AddStringToObject(json, "Category", expense.category);
-    cJSON_AddNumberToObject(json, "Amount", expense.amount);
-    char *json_str = cJSON_Print(json);
+    // cJSON *json = cJSON_CreateObject();
+    // cJSON_AddStringToObject(json, "Date", expense.date);
+    // cJSON_AddStringToObject(json, "Category", expense.category);
+    // cJSON_AddNumberToObject(json, "Amount", expense.amount);
+    // char *json_str = cJSON_Print(json);
 
-    // write the JSON string to a file
-    FILE *fp = fopen("data/expenses.json", "w");
-    if (fp == NULL)
-    {
-        printf("Error: Unable to open the file.\n");
-        return 1;
-    }
-    printf("%s\n", json_str);
-    fputs(json_str, fp);
-    fclose;
-    // free the JSON string and cJSON object
-    cJSON_free(json_str);
-    cJSON_Delete(json);
-    return 0;
+    // // write the JSON string to a file
+    // FILE *fp = fopen("data/expenses.json", "w");
+    // if (fp == NULL)
+    // {
+    //     printf("Error: Unable to open the file.\n");
+    //     return 1;
+    // }
+    // printf("%s\n", json_str);
+    // fputs(json_str, fp);
+    // fclose;
+    // // free the JSON string and cJSON object
+    // cJSON_free(json_str);
+    // cJSON_Delete(json);
+    // return 0;
+    return testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
 }
 
 void separateDate(char input[]) {
