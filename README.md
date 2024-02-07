@@ -9,3 +9,9 @@ gcc main.c testSave.o -o main -lcjson
 ```
 
 ## These lines are for me to compile the code, and I'm not going to tell you how to do it
+
+## TODO
+
+- [] Auto generate the month and its days if not exists in the data.
+  
+- [] List all the expenses in the data file with specific talbe format.
