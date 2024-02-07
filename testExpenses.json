@@ -1,51 +1,8 @@
 {
 	"2024":	{
-		"01":	{
-			"31":	{
-				"ex1":	{
-					"amount":	100,
-					"category":	"Food",
-					"description":	"no"
-				},
-				"ex2":	{
-					"amount":	1,
-					"category":	"Food",
-					"description":	"1"
-				},
-				"ex3":	{
-					"amount":	1000,
-					"category":	"Transportation",
-					"description":	"Ve"
-				}
-			}
-		},
 		"02":	{
-			"04":	{
+			"08":	{
 				"ex1":	{
-					"amount":	1,
-					"category":	"Food",
-					"description":	"1"
-				},
-				"ex2":	{
-					"amount":	1,
-					"category":	"Food",
-					"description":	"1"
-				}
-			},
-			"05":	{
-				"ex1":	{
-					"amount":	10000,
-					"category":	"Food",
-					"description":	"cafe"
-				}
-			},
-			"07":	{
-				"ex1":	{
-					"amount":	1,
-					"category":	"Food",
-					"description":	"1"
-				},
-				"ex2":	{
 					"amount":	1,
 					"category":	"Food",
 					"description":	"1"
