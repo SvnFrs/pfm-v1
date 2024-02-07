@@ -8,28 +8,30 @@
 
 int testSave(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
     cJSON *root = NULL;
-    // Open the JSON file
     FILE *fp = fopen("testExpenses.json", "r");
 
     if (fp != NULL) {
         // Load existing JSON data from the file
         fseek(fp, 0, SEEK_END);
-        // Get the size of the file
         long file_size = ftell(fp);
         fseek(fp, 0, SEEK_SET);
-        // Allocate a buffer to store the file contents
-        char *json_str = (char *)malloc(file_size + 1);
-        // Read the file into the buffer
-        fread(json_str, 1, file_size, fp);
-        fclose(fp);
 
-        // Parse the JSON data
-        root = cJSON_Parse(json_str);
-        free(json_str);
+        if (file_size > 0) {
+            char *json_str = (char *)malloc(file_size + 1);
+            fread(json_str, 1, file_size, fp);
+            fclose(fp);
 
-        if (root == NULL) {
-            printf("Error: Failed to parse JSON data.\n");
-            return 1;
+            // Parse the JSON data
+            root = cJSON_Parse(json_str);
+            free(json_str);
+
+            if (root == NULL) {
+                printf("Error: Failed to parse JSON data.\n");
+                return 1;
+            }
+        } else {
+            // The file is empty, create a new JSON structure
+            root = cJSON_CreateObject();
         }
     } else {
         // The file doesn't exist, create a new JSON structure
@@ -42,13 +44,13 @@ int testSave(char day[80], char month[80], char year[80], char category[80], cha
         yearObj = cJSON_CreateObject();
         cJSON_AddItemToObject(root, year, yearObj);
     }
-    // Check if the month/day structure already exists
+
     cJSON *monthObj = cJSON_GetObjectItem(yearObj, month);
     if (monthObj == NULL) {
         monthObj = cJSON_CreateObject();
         cJSON_AddItemToObject(yearObj, month, monthObj);
     }
-    // Check if the day structure already exists
+
     cJSON *dayObj = cJSON_GetObjectItem(monthObj, day);
     if (dayObj == NULL) {
         dayObj = cJSON_CreateObject();
@@ -79,6 +81,7 @@ int testSave(char day[80], char month[80], char year[80], char category[80], cha
 
     return 0;
 }
+
 
 void testPrint() {
     FILE *fp = fopen("testExpenses.json", "r");
