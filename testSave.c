@@ -42,7 +42,7 @@ int testSave(char day[80], char month[80], char year[80], char category[80], cha
         yearObj = cJSON_CreateObject();
         cJSON_AddItemToObject(root, year, yearObj);
     }
-
+    // Check if the month/day structure already exists
     cJSON *monthObj = cJSON_GetObjectItem(yearObj, month);
     if (monthObj == NULL) {
         monthObj = cJSON_CreateObject();
