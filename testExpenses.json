@@ -31,6 +31,13 @@
 					"category":	"Food",
 					"description":	"1"
 				}
+			},
+			"05":	{
+				"ex1":	{
+					"amount":	10000,
+					"category":	"Food",
+					"description":	"cafe"
+				}
 			}
 		}
 	}
