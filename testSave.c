@@ -8,14 +8,18 @@
 
 int testSave(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
     cJSON *root = NULL;
+    // Open the JSON file
     FILE *fp = fopen("testExpenses.json", "r");
 
     if (fp != NULL) {
         // Load existing JSON data from the file
         fseek(fp, 0, SEEK_END);
+        // Get the size of the file
         long file_size = ftell(fp);
         fseek(fp, 0, SEEK_SET);
+        // Allocate a buffer to store the file contents
         char *json_str = (char *)malloc(file_size + 1);
+        // Read the file into the buffer
         fread(json_str, 1, file_size, fp);
         fclose(fp);
 
