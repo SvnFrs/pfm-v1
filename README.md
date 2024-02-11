@@ -12,6 +12,6 @@ gcc main.c testSave.o -o main -lcjson
 
 ## TODO
 
-- [] Auto generate the month and its days if not exists in the data.
+- [x] Auto generate the month and its days if not exists in the data.
   
 - [] List all the expenses in the data file with specific talbe format.
