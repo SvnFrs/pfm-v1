@@ -267,5 +267,5 @@ void separateDate(char input[]) {
 
 void listExpenses() {
     printf("Nothing here yet\n");
-    testPrint();
+    // testPrint();
 }
