@@ -1,10 +1,39 @@
-#include "testSave.h"
-
 #include <stdio.h>
-#include <time.h>
-#include <cjson/cJSON.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <cjson/cJSON.h>
+
+// Function to check if a year is a leap year
+bool isLeapYear(int year) {
+    if (year % 4 != 0) {
+        return false;
+    } else if (year % 100 != 0) {
+        return true;
+    } else if (year % 400 != 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+// Function to get the last day of a month in a specific year
+int getLastDayOfMonth(int month, int year) {
+    int lastDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (month == 2 && isLeapYear(year)) {
+        return 29;
+    }
+    return lastDays[month - 1];
+}
+
+// Function to generate a skeleton of days for a month
+void generateSkeletonDays(cJSON *monthObj, int lastDay) {
+    for (int day = 1; day <= lastDay; day++) {
+        char dayStr[3];
+        snprintf(dayStr, sizeof(dayStr), "%02d", day);
+        cJSON_AddObjectToObject(monthObj, dayStr);
+    }
+}
 
 int testSave(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
     cJSON *root = NULL;
@@ -49,12 +78,17 @@ int testSave(char day[80], char month[80], char year[80], char category[80], cha
     if (monthObj == NULL) {
         monthObj = cJSON_CreateObject();
         cJSON_AddItemToObject(yearObj, month, monthObj);
+
+        // Generate a skeleton of days for the month
+        int lastDay = getLastDayOfMonth(atoi(month), atoi(year));
+        generateSkeletonDays(monthObj, lastDay);
     }
 
     cJSON *dayObj = cJSON_GetObjectItem(monthObj, day);
     if (dayObj == NULL) {
-        dayObj = cJSON_CreateObject();
-        cJSON_AddItemToObject(monthObj, day, dayObj);
+        printf("Error: The specified day '%s' does not exist.\n", day);
+        cJSON_Delete(root);
+        return 1;
     }
 
     // Generate a unique ID for the new expense
