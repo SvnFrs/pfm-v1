@@ -58,6 +58,10 @@ void createTableHeader(int columnCount, char *columnNames[], int columnWidths[])
 
 }
 
+void createTableBody() {
+    
+}
+
 int main() {
     char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "Category", "Description"};
     // int columnWidths[] = {10, 10, 10, 10, 10, 10, 10};
