@@ -171,6 +171,7 @@ void createTableSeparator(int columnCount, int columnWidths[]) {
 }
 
 int main() {
+    system("./new.sh");
     createTable();
     return 0;
 }
