@@ -8,6 +8,7 @@
 void createTable();
 void createTableHeader(int columnCount, char *columnNames[], int columnWidths[]);
 void createTableBody(cJSON *root, int columnCount, char *columnNames[], int columnWidths[]);
+void createTableSeparator(int columnCount, int columnWidths[]);
 int* calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[]);
 
 void createTable() {
@@ -18,7 +19,7 @@ void createTable() {
     createTableHeader(7, columnNames, columnWidths);
 
     // Load and parse the JSON data
-    FILE *fp = fopen("testExpenses.json", "r");
+    FILE *fp = fopen("testCache.json", "r");
     if (fp != NULL) {
         fseek(fp, 0, SEEK_END);
         long file_size = ftell(fp);
@@ -181,3 +182,4 @@ int* calculateColumnWidths(int columnCount, char *columnNames[], int columnWidth
     }
     return columnWidths;
 }
+
