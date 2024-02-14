@@ -3,7 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"sort"
 )
@@ -12,7 +11,7 @@ type ExpenseData map[string]map[string]map[string]interface{}
 
 func main() {
 	// Read the JSON data from the file
-	file, err := ioutil.ReadFile("../testExpenses.json")
+	file, err := os.ReadFile("../testExpenses.json")
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return
@@ -47,7 +46,7 @@ func main() {
 	}
 
 	// Write the sorted JSON to a new file
-	err = ioutil.WriteFile("testCache.json", sortedJSON, os.ModePerm)
+	err = os.WriteFile("testCache.json", sortedJSON, os.ModePerm)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
 		return
