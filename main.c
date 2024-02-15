@@ -5,6 +5,8 @@
 #include <string.h>
 
 #include "testSave.h"
+#include "testTable.h"
+
 
 void printMenu();
 // int fun(char date[]);
@@ -266,6 +268,8 @@ void separateDate(char input[]) {
 }
 
 void listExpenses() {
-    printf("Nothing here yet\n");
+    // printf("Nothing here yet\n");
     // testPrint();
+    system("./new.sh");
+    createTable();
 }
