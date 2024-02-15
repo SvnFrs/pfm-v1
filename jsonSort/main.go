@@ -46,7 +46,7 @@ func main() {
 	}
 
 	// Write the sorted JSON to a new file
-	err = os.WriteFile("testCache.json", sortedJSON, os.ModePerm)
+	err = os.WriteFile("../testCache.json", sortedJSON, os.ModePerm)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
 		return
