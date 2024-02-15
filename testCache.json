@@ -64,7 +64,18 @@
 					"description": "1"
 				}
 			},
-			"14": {},
+			"14": {
+				"ex1": {
+					"amount": 1,
+					"category": "Food",
+					"description": "1"
+				},
+				"ex2": {
+					"amount": 1,
+					"category": "Food",
+					"description": "1"
+				}
+			},
 			"15": {},
 			"16": {},
 			"17": {},
