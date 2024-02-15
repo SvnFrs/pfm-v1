@@ -3,13 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <cjson/cJSON.h>
-
-
-void createTable();
-void createTableHeader(int columnCount, char *columnNames[], int columnWidths[]);
-void createTableBody(cJSON *root, int columnCount, char *columnNames[], int columnWidths[]);
-void createTableSeparator(int columnCount, int columnWidths[]);
-int* calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[]);
+#include "testTable.h"
 
 void createTable() {
     char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "Category", "Description"};
@@ -170,11 +164,11 @@ void createTableSeparator(int columnCount, int columnWidths[]) {
     printf("\n");
 }
 
-int main() {
-    system("./new.sh");
-    createTable();
-    return 0;
-}
+// int main() {
+//     system("./new.sh");
+//     createTable();
+//     return 0;
+// }
 
 
 int* calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[]) {
