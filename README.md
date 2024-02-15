@@ -5,6 +5,10 @@ gcc -c testSave.c -o testSave.o
 ```
 
 ```shell
+gcc -c testTable.c -o testTable.o    
+```
+
+```shell
 gcc main.c testSave.o -o main -lcjson
 ```
 
@@ -15,7 +19,7 @@ gcc main.c testSave.o -o main -lcjson
 - [x] Auto generate the month and its days if not exists in the data.
   
 - [x] List all the expenses in the data file with specific table format.
-- [ ] Update table format to be more precise and clear.
+- [x] Update table format to be more precise and clear.
 - [ ] Add the ability to delete an expense from the data file.
 - [ ] Add the ability to update an expense from the data file.
 - [ ] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
