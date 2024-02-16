@@ -52,6 +52,16 @@
 			"15":	{
 			},
 			"16":	{
+				"ex1":	{
+					"amount":	2000,
+					"category":	"Food",
+					"description":	"khong"
+				},
+				"ex2":	{
+					"amount":	20000,
+					"category":	"Food",
+					"description":	"MuaKeo"
+				}
 			},
 			"17":	{
 			},
