@@ -268,8 +268,45 @@ void separateDate(char input[]) {
 }
 
 void listExpenses() {
-    // printf("Nothing here yet\n");
-    // testPrint();
-    system("./new.sh");
-    createTable();
+    printPeriodChoice();
+}
+
+void printPeriodChoice() {
+    printf("Choose expense period\n");
+    printf("1. Monthly\n");
+    printf("2. Yearly\n");
+    printf("3. All\n");
+    printf("4. Custom\n");
+    printf("Your choice:");
+    int choice;
+    do
+    {
+        if (scanf("%d", &choice) != 1)
+        {
+            // If scanf fails to read an integer
+            printf("Invalid input. Please enter a valid integer.\n");
+            // Clear the input buffer to prevent an infinite loop on invalid input
+            while (getchar() != '\n')
+                ;
+            continue;
+        }
+    } while (choice > 4);
+    switch (choice)
+    {
+    case 1:
+        printf("You choose Monthly\n");
+        break;
+    case 2:
+        printf("You choose Yearly\n");
+        break;
+    case 3:
+        printf("You choose All\n");
+        break;
+    case 4:
+        printf("You choose Custom\n");
+        break;
+    default:
+        printf("Invalid choice\n");
+        break;
+    }
 }
