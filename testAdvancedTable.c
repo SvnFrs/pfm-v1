@@ -255,12 +255,13 @@ void printYearlyExpenses()
                 {
                     calculateColumnWidths(7, columnNames, columnWidths);
                     createTableHeader(7, columnNames, columnWidths);
-                    cJSON *monthObj = yearObj->child;
-                    while (monthObj != NULL)
-                    {
+                    // cJSON *monthObj = yearObj->child;
+                    // while (monthObj != NULL)
+                    // {
                         // createTableBody(monthObj, 7, columnNames, columnWidths);
-                        monthObj = monthObj->next;
-                    }
+                        createTableBodyYearly(yearObj, 7, columnNames, columnWidths);
+                        // monthObj = monthObj->next;
+                    // }
                 }
                 else
                 {
@@ -281,6 +282,26 @@ void printYearlyExpenses()
     else
     {
         printf("Error: Failed to open the file.\n");
+    }
+}
+
+void createTableBodyYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 5;
+    // calculate spaces based on padding
+    char spaces[padding + 1];
+
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
+    }
+    spaces[padding] = '\0';
+
+    cJSON *monthObj = yearObj->child;
+    while (monthObj != NULL)
+    {
+        createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
+        monthObj = monthObj->next;
     }
 }
 
