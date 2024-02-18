@@ -20,6 +20,7 @@ gcc main.c testSave.o -o main -lcjson
   
 - [x] List all the expenses in the data file with specific table format.
 - [x] Update table format to be more precise and clear.
+- [ ] Add another data file to store the expenses with quarter period.
 - [ ] Create table method specific for the period of time.
 - [ ] Add the ability to delete an expense from the data file.
 - [ ] Add the ability to update an expense from the data file.
