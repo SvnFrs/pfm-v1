@@ -392,6 +392,7 @@ void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int c
     {
         spaces[i] = ' ';
     }
+    spaces[padding] = '\0';
     // add padding to columnWidths
     // for (int i = 0; i < columnCount; i++) {
     // columnWidths[i] += padding;
