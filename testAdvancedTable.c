@@ -12,9 +12,10 @@ int main()
 {
     printf("Choose an option:\n");
     printf("1. Print monthly expenses\n");
-    printf("2. Print yearly expenses\n");
-    printf("3. Print all expenses\n");
-    printf("4. Print custom expenses\n");
+    printf("2. Print quarterly expenses\n");
+    printf("3. Print yearly expenses\n");
+    printf("4. Print all expenses\n");
+    printf("5. Print custom expenses\n");
     printf("Your choice: ");
     int choice;
     scanf("%d", &choice);
@@ -24,12 +25,15 @@ int main()
         printMonthlyExpenses();
         break;
     case 2:
-        printYearlyExpenses();
+        // printQuarterlyExpenses();
         break;
     case 3:
-        printAllExpenses();
+        printYearlyExpenses();
         break;
     case 4:
+        printAllExpenses();
+        break;
+    case 5:
         // printCustomExpenses();
         break;
     default:
