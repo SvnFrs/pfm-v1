@@ -21,9 +21,6 @@ for testing the advanced table.
 gcc testAdvancedTable.c -lcjson ; ./a.out
 ```
 
-
-## These lines are for me to compile the code, and I'm not going to tell you how to do it
-
 ## TODO
 
 - [x] Auto generate the month and its days if not exists in the data.
