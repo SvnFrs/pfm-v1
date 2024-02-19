@@ -24,5 +24,5 @@ gcc main.c testSave.o -o main -lcjson
 - [ ] Create table method specific for the period of time.
 - [ ] Add the ability to delete an expense from the data file.
 - [ ] Add the ability to update an expense from the data file.
-- [ ] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
+- [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
 - [ ] Add the ability to list all the expenses in the data file for a specific period.
