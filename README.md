@@ -1,5 +1,8 @@
 # This  is my project, and it is mine so I'm going to take full marks for it
 
+for compiling the code, you need to have the cjson library installed on your machine.
+these are the commands to compile the code.
+
 ```shell
 gcc -c testSave.c -o testSave.o  
 ```
@@ -11,6 +14,13 @@ gcc -c testTable.c -o testTable.o
 ```shell
 gcc main.c testSave.o -o main -lcjson
 ```
+
+for testing the advanced table.
+
+```shell
+gcc testAdvancedTable.c -lcjson ; ./a.out
+```
+
 
 ## These lines are for me to compile the code, and I'm not going to tell you how to do it
 
