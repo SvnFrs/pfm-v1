@@ -31,8 +31,9 @@ gcc testAdvancedTable.c -lcjson ; ./a.out
 - [x] List all the expenses in the data file with specific table format.
 - [x] Update table format to be more precise and clear.
 - [ ] Add another data file to store the expenses with quarter period.
-- [ ] Create table method specific for the period of time.
+- [x] Create table method specific for the period of time.
 - [ ] Add the ability to delete an expense from the data file.
 - [ ] Add the ability to update an expense from the data file.
 - [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
 - [ ] Add the ability to list all the expenses in the data file for a specific period.
+- [ ] List statistics for the expenses in the data file by month / quarter / year.
