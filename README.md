@@ -32,5 +32,5 @@ gcc testAdvancedTable.c -lcjson ; ./a.out
 - [ ] Add the ability to delete an expense from the data file.
 - [ ] Add the ability to update an expense from the data file.
 - [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
-- [ ] Add the ability to list all the expenses in the data file for a specific period.
+- [x] Add the ability to list all the expenses in the data file for a specific period.
 - [ ] List statistics for the expenses in the data file by month / quarter / year.
