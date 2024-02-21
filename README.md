@@ -4,27 +4,21 @@ for compiling the code, you need to have the cjson library installed on your mac
 these are the commands to compile the code.
 
 ```shell
-gcc -c testSave.c -o testSave.o  
+gcc -c save.c -o save.o  
 ```
 
 ```shell
-gcc -c testTable.c -o testTable.o    
+gcc -c table.c -o table.o    
 ```
 
 ```shell
-gcc main.c testSave.o -o main -lcjson
-```
-
-for testing the advanced table.
-
-```shell
-gcc testAdvancedTable.c -lcjson ; ./a.out
+gcc main.c save.o table.o -o main -lcjson
 ```
 
 ## TODO
 
-- [x] Auto generate the month and its days if not exists in the data.
-  
+- [ ] Learn Cmake and use it to compile the code.
+- [x] Auto generate the month and its days if not exists in the data.  
 - [x] List all the expenses in the data file with specific table format.
 - [x] Update table format to be more precise and clear.
 - [ ] Add another data file to store the expenses with quarter period.
