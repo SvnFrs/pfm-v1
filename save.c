@@ -37,7 +37,7 @@ void generateSkeletonDays(cJSON *monthObj, int lastDay) {
     }
 }
 
-int testSave(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
+int save(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
     cJSON *root = NULL;
     FILE *fp = fopen("testExpenses.json", "r");
 

@@ -4,8 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "testSave.h"
-#include "testTable.h"
+#include "save.h"
 #include "table.h"
 
 
@@ -248,7 +247,7 @@ int saveExpense() {
     // cJSON_free(json_str);
     // cJSON_Delete(json);
     // return 0;
-    return testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
+    return save(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
 }
 
 void separateDate(char input[]) {
