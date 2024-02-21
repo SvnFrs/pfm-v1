@@ -6,10 +6,6 @@ expenses.json
 
 /main
 
-/testSave.o
+/save.o
 
 /table.o
-
-/testAdvancedTable.c
-
-/testAdvancedTable.h
