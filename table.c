@@ -19,7 +19,7 @@ struct Date
     char year[80];
 } startDate, endDate;
 
-int main()
+int listExpenses()
 {
     printf("Choose an option:\n");
     printf("1. Print monthly expenses\n");
@@ -531,8 +531,8 @@ void printCustomExpenses()
                 {
                     calculateColumnWidths(7, columnNames, columnWidths);
                     createTableHeader(7, columnNames, columnWidths);
-                    separateDate(startDatee, 1);
-                    separateDate(endDatee, 2);
+                    separateSEDate(startDatee, 1);
+                    separateSEDate(endDatee, 2);
                     createTableBodyCustom(root, 7, columnNames, columnWidths);
                     cJSON_Delete(root);
                 }
@@ -693,7 +693,7 @@ void createTableHeader(int columnCount, char *columnNames[], int columnWidths[])
     printf("\n");
 }
 
-void separateDate(char input[], int choice)
+void separateSEDate(char input[], int choice)
 {
     char *token = strtok(input, "/");
     int count = 0;

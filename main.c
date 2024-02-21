@@ -6,11 +6,12 @@
 
 #include "testSave.h"
 #include "testTable.h"
+#include "table.h"
 
 
 void printMenu();
 void enterExpenses();
-void listExpenses();
+// void listExpenses();
 void printDateChoice();
 void printExpenseAmount();
 void printCategoryChoice();
@@ -266,9 +267,9 @@ void separateDate(char input[]) {
     }
 }
 
-void listExpenses() {
-    printPeriodChoice();
-}
+// void listExpenses() {
+//     printPeriodChoice();
+// }
 
 void printPeriodChoice() {
     printf("Choose expense period\n");

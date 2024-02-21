@@ -1,102 +1,119 @@
 #include <stdio.h>
-#include <time.h>
-#include <cjson/cJSON.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <cjson/cJSON.h>
 
-// TODO : make this to be a library
+#include "save.h"
 
-int main()
-{
-    char *filename = "expenses.json";
-    struct Expense
-    {
-        char date[80];
-        char category[80];
-        char description[80];
-        long amount;
-    } expense;
+// Function to check if a year is a leap year
+bool isLeapYear(int year) {
+    if (year % 4 != 0) {
+        return false;
+    } else if (year % 100 != 0) {
+        return true;
+    } else if (year % 400 != 0) {
+        return false;
+    } else {
+        return true;
+    }
+}
 
-    struct Date
-    {
-        char day[80];
-        char month[80];
-        char year[80];
-    } date;
+// Function to get the last day of a month in a specific year
+int getLastDayOfMonth(int month, int year) {
+    int lastDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (month == 2 && isLeapYear(year)) {
+        return 29;
+    }
+    return lastDays[month - 1];
+}
 
-    const char * months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September",
-    "October", "November", "December"};
+// Function to generate a skeleton of days for a month
+void generateSkeletonDays(cJSON *monthObj, int lastDay) {
+    for (int day = 1; day <= lastDay; day++) {
+        char dayStr[3];
+        snprintf(dayStr, sizeof(dayStr), "%02d", day);
+        cJSON_AddObjectToObject(monthObj, dayStr);
+    }
+}
 
-    char *tempDay = (char *)malloc(80 * sizeof(char));
-    char *tempMonth = (char *)malloc(80 * sizeof(char));
-    char *tempYear = (char *)malloc(80 * sizeof(char));
+int testSave(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
+    cJSON *root = NULL;
+    FILE *fp = fopen("testExpenses.json", "r");
 
-    char *ID = "ex1";
+    if (fp != NULL) {
+        // Load existing JSON data from the file
+        fseek(fp, 0, SEEK_END);
+        long file_size = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
 
-    cJSON *root = cJSON_CreateObject();
+        if (file_size > 0) {
+            char *json_str = (char *)malloc(file_size + 1);
+            fread(json_str, 1, file_size, fp);
+            fclose(fp);
 
-    printf("Enter date (DD/MM/YYYY):\n");
-    printf("Day: ");
-    fgets(tempDay, 80, stdin);
-    printf("Month: ");
-    fgets(tempMonth, 80, stdin);
-    printf("Year: ");
-    fgets(tempYear, 80, stdin);
+            // Parse the JSON data
+            root = cJSON_Parse(json_str);
+            free(json_str);
 
-    tempDay[strcspn(tempDay, "\n")] = '\0';
-    tempMonth[strcspn(tempMonth, "\n")] = '\0';
-    tempYear[strcspn(tempYear, "\n")] = '\0';
+            if (root == NULL) {
+                printf("Error: Failed to parse JSON data.\n");
+                return 1;
+            }
+        } else {
+            // The file is empty, create a new JSON structure
+            root = cJSON_CreateObject();
+        }
+    } else {
+        // The file doesn't exist, create a new JSON structure
+        root = cJSON_CreateObject();
+    }
 
-    // format year to year_yyyy
-    strcpy(date.year, "year_");
-    strcat(date.year, tempYear);
+    // Check if the year/month/day structure already exists
+    cJSON *yearObj = cJSON_GetObjectItem(root, year);
+    if (yearObj == NULL) {
+        yearObj = cJSON_CreateObject();
+        cJSON_AddItemToObject(root, year, yearObj);
+    }
 
-    // format month to month_mm
-    strcpy(date.month, "month_");
-    strcat(date.month, months[atoi(tempMonth) - 1]);
+    cJSON *monthObj = cJSON_GetObjectItem(yearObj, month);
+    if (monthObj == NULL) {
+        monthObj = cJSON_CreateObject();
+        cJSON_AddItemToObject(yearObj, month, monthObj);
 
-    // format day to day_dd
-    strcpy(date.day, "day_");
-    strcat(date.day, tempDay);
+        // Generate a skeleton of days for the month
+        int lastDay = getLastDayOfMonth(atoi(month), atoi(year));
+        generateSkeletonDays(monthObj, lastDay);
+    }
 
-    // from date to expense.date
-    strcpy(expense.date, tempDay);
-    strcat(expense.date, "/");
-    strcat(expense.date, tempMonth);
-    strcat(expense.date, "/");
-    strcat(expense.date, tempYear);
+    cJSON *dayObj = cJSON_GetObjectItem(monthObj, day);
+    if (dayObj == NULL) {
+        printf("Error: The specified day '%s' does not exist.\n", day);
+        cJSON_Delete(root);
+        return 1;
+    }
 
-    printf("Date: %s\n", expense.date);
+    // Generate a unique ID for the new expense
+    char ID[80];
+    snprintf(ID, sizeof(ID), "ex%d", cJSON_GetArraySize(dayObj) + 1);
 
-    // printf("Day: %s\n", date.day);
+    // Create the new expense object
+    cJSON *expense = cJSON_CreateObject();
+    cJSON_AddNumberToObject(expense, "amount", amount);
+    cJSON_AddStringToObject(expense, "category", category);
+    cJSON_AddStringToObject(expense, "description", description);
 
-    printf("Enter amount: ");
-    scanf("%ld", &expense.amount);
+    // Add the new expense to the existing JSON structure
+    cJSON_AddItemToObject(dayObj, ID, expense);
 
-    printf("Enter category: ");
-    scanf("%s", expense.category);
-
-    printf("Enter description: ");
-    scanf("%s", expense.description);
-
-    cJSON_AddItemToObject(root, date.year, cJSON_CreateObject());
-    cJSON_AddItemToObject(cJSON_GetObjectItem(root, date.year), date.month, cJSON_CreateObject());
-    cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day, cJSON_CreateObject());
-    cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses", cJSON_CreateObject());
-    cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID, cJSON_CreateObject());
-    cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID), "amount", cJSON_CreateNumber(expense.amount));
-    cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID), "category", cJSON_CreateString(expense.category));
-    cJSON_AddItemToObject(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(cJSON_GetObjectItem(root, date.year), date.month), date.day), "expenses"), ID), "description", cJSON_CreateString(expense.description));
-
-    char *jsonString = cJSON_Print(root);
-    FILE *fp = fopen(filename, "w");
-    fprintf(fp, "%s", jsonString);
+    // Save the updated JSON structure to the file
+    char *json_str = cJSON_Print(root);
+    fp = fopen("testExpenses.json", "w");
+    fprintf(fp, "%s", json_str);
     fclose(fp);
 
-    free(tempDay);
-    free(tempMonth);
-    free(tempYear);
+    // Free the JSON structure
+    cJSON_Delete(root);
 
     return 0;
-
 }

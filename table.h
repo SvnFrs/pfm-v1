@@ -1,5 +1,6 @@
 #include <cjson/cJSON.h>
 
+extern int listExpenses();
 extern void printAllExpenses();
 extern void printMonthlyExpenses();
 extern void printQuarterlyExpenses();
@@ -14,4 +15,4 @@ extern bool createTableBodyCustom(cJSON *root, int columnCount, char *columnName
 extern void createTableSeparator(int columnCount, int columnWidths[]);
 extern int* calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[]);
 extern int printQuarterlyChoice();
-extern void separateDate();
+extern void separateSEDate();

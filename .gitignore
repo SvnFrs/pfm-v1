@@ -8,6 +8,8 @@ expenses.json
 
 /testSave.o
 
+/table.o
+
 /testAdvancedTable.c
 
 /testAdvancedTable.h
