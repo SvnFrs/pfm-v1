@@ -8,6 +8,8 @@
 // Default column names and widths
 char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "Category", "Description"};
 int columnWidths[7];
+char year[80], month[80], day[80], ID[80], category[80], description[80];
+long amount;
 
 // Struct to store the start and end date
 struct Date
@@ -138,9 +140,6 @@ void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
         while (expenseObj != NULL)
         {
             // Extract the expense information
-            char year[80], month[80], day[80], ID[80], category[80], description[80];
-            long amount;
-
             strcpy(year, yearObj->string);
             strcpy(month, monthObj->string);
             strcpy(day, dayObj->string);
@@ -451,9 +450,6 @@ void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int c
                 while (expenseObj != NULL)
                 {
                     // Extract the expense information
-                    char year[80], month[80], day[80], ID[80], category[80], description[80];
-                    long amount;
-
                     strcpy(year, yearObj->string);
                     strcpy(month, monthObj->string);
                     strcpy(day, dayObj->string);
@@ -581,9 +577,6 @@ void createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], in
                             while (expenseObj != NULL)
                             {
                                 // Extract the expense information
-                                char year[80], month[80], day[80], ID[80], category[80], description[80];
-                                long amount;
-
                                 strcpy(year, yearObj->string);
                                 strcpy(month, monthObj->string);
                                 strcpy(day, dayObj->string);
