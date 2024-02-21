@@ -524,13 +524,22 @@ void printCustomExpenses()
             free(json_str);
 
             if (root != NULL)
-            {
-                calculateColumnWidths(7, columnNames, columnWidths);
-                createTableHeader(7, columnNames, columnWidths);
-                separateDate(startDatee, 1);
-                separateDate(endDatee, 2);
-                createTableBodyCustom(root, 7, columnNames, columnWidths);
-                cJSON_Delete(root);
+            {     
+                bool expensesFound = createTableBodyCustom(root, 7, columnNames, columnWidths);
+
+                if (expensesFound)
+                {
+                    calculateColumnWidths(7, columnNames, columnWidths);
+                    createTableHeader(7, columnNames, columnWidths);
+                    separateDate(startDatee, 1);
+                    separateDate(endDatee, 2);
+                    createTableBodyCustom(root, 7, columnNames, columnWidths);
+                    cJSON_Delete(root);
+                }
+                else
+                {
+                    printf("No expenses found for the entered period.\n");
+                }
             }
             else
             {
@@ -548,7 +557,7 @@ void printCustomExpenses()
     }
 }
 
-void createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
+bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
 {
     int padding = 5;
     char spaces[padding + 1];
@@ -559,6 +568,9 @@ void createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], in
     spaces[padding] = '\0';
 
     cJSON *yearObj = root->child;
+
+    bool expensesPrinted = false; // Initialize a flag
+    
     while (yearObj != NULL)
     {
         if (strcmp(yearObj->string, startDate.year) >= 0 && strcmp(yearObj->string, endDate.year) <= 0)
@@ -611,6 +623,8 @@ void createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], in
                                        columnWidths[6], description, spaces);
                                 createTableSeparator(7, columnWidths);
 
+                                expensesPrinted = true; // Set the flag to true
+                                
                                 expenseObj = expenseObj->next;
                             }
                         }
@@ -625,6 +639,7 @@ void createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], in
 
         yearObj = yearObj->next;
     }
+    return expensesPrinted; // Return the flag
 }
 
 void createTableHeader(int columnCount, char *columnNames[], int columnWidths[])
