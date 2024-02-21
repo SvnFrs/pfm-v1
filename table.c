@@ -1,212 +1,755 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <cjson/cJSON.h>
+#include "table.h"
 
-// Define the CustomTable structure
-typedef struct {
-    int ColumnGAP;
-    int DATA;
-    int NUMBER;
-} CustomTable;
+// Default column names and widths
+char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "Category", "Description"};
+int columnWidths[7];
 
-// Function to create a CustomTable instance
-CustomTable createCustomTable() {
-    CustomTable table;
-    table.ColumnGAP = 2;
-    table.DATA = 0;
-    table.NUMBER = 1;
-    return table;
+// Struct to store the start and end date
+struct Date
+{
+    char day[80];
+    char month[80];
+    char year[80];
+} startDate, endDate;
+
+int main()
+{
+    printf("Choose an option:\n");
+    printf("1. Print monthly expenses\n");
+    printf("2. Print quarterly expenses\n");
+    printf("3. Print yearly expenses\n");
+    printf("4. Print all expenses\n");
+    printf("5. Print custom expenses\n");
+    printf("Your choice: ");
+    int choice;
+    scanf("%d", &choice);
+    switch (choice)
+    {
+    case 1:
+        printMonthlyExpenses();
+        break;
+    case 2:
+        printQuarterlyExpenses();
+        break;
+    case 3:
+        printYearlyExpenses();
+        break;
+    case 4:
+        printAllExpenses();
+        break;
+    case 5:
+        printCustomExpenses();
+        break;
+    default:
+        printf("Invalid choice\n");
+        break;
+    }
 }
 
-// Function to create a menu
-char* createMenu(CustomTable table, char* title, char** option, int ReturnMode, int len) {
-    int mode = 0;
-    printf("\t%s\n", title);
-    for (int i = 0; i < len; i++) {
-        printf("%d. %s\n", i + 1, option[i]);
-    }
-    printf("\tPlease choose: ");
+void printMonthlyExpenses()
+{
+    int year, month;
+    printf("Enter the year: ");
+    scanf("%d", &year);
+    printf("Enter the month: ");
+    scanf("%d", &month);
 
-    do {
-        char input[100];
-        if (fgets(input, sizeof(input), stdin) == NULL) {
-            exit(EXIT_FAILURE);
-        }
+    // Load and parse the JSON data
+    FILE *fp = fopen("testCache.json", "r");
+    if (fp != NULL)
+    {
+        fseek(fp, 0, SEEK_END);
+        long file_size = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
 
-        int ret = sscanf(input, "%d", &mode);
-        if (ret != 1 || !(mode >= 1 && mode <= len)) {
-            printf("Please input integer from 1 to %d!\n", len);
-            printf("\tPlease choose: ");
-        }
-    } while (!(mode >= 1 && mode <= len));
+        if (file_size > 0)
+        {
+            char *json_str = (char *)malloc(file_size + 1);
+            fread(json_str, 1, file_size, fp);
+            fclose(fp);
 
-    if (ReturnMode == table.DATA) {
-        return option[mode - 1];
-    } else {
-        char* result = malloc(10 * sizeof(char));
-        sprintf(result, "%d", mode);
-        return result;
-    }
-}
+            cJSON *root = cJSON_Parse(json_str);
+            free(json_str);
 
-// Function to get Yes/No statement
-char* YesNoStatement(char* content) {
-    char* option = malloc(3 * sizeof(char)); // Allocate enough space for "Y\0" or "N\0"
-    do {
-        printf("%s\n", content);
-        if (fgets(option, 3, stdin) == NULL) {
-            exit(EXIT_FAILURE);
-        }
-
-        // Remove newline character
-        option[strcspn(option, "\n")] = 0;
-
-        if (!(strcmp(option, "Y") == 0 || strcmp(option, "N") == 0)) {
-            printf("Please input Y or N\n");
-        }
-    } while (!(strcmp(option, "Y") == 0 || strcmp(option, "N") == 0));
-
-    return option;
-}
-
-// Function to create table header
-void createTH(CustomTable table, char** TableHeader, int len) {
-    int total_Table_Length = 0;
-    for (int i = 0; i < len; i++) {
-        total_Table_Length += (table.ColumnGAP * 3 + strlen(TableHeader[i]));
-    }
-    total_Table_Length++;
-
-    for (int i = 0; i < 3; i++) {
-        int SpaceCounting = 0;
-        int next = 0;
-
-        for (int j = 0; j < total_Table_Length; j++) {
-            if (next < len && SpaceCounting - table.ColumnGAP == (strlen(TableHeader[next]) + table.ColumnGAP * 2)) {
-                if (i == 0 || i == 2) {
-                    printf("+");
-                } else if (i == 1) {
-                    printf("|");
-                }
-                SpaceCounting = 1;
-                next++;
-            } else {
-                if ((i == 2 || i == 0) && (j == 0 || j == total_Table_Length - 1)) {
-                    printf("+");
-                } else if (i == 1 && (j == 0 || j == total_Table_Length - 1)) {
-                    printf("|");
-                } else if (i == 0 || i == 2) {
-                    printf("-");
-                } else if (next < len && i == 1 && (SpaceCounting - table.ColumnGAP < table.ColumnGAP ||
-                                                    SpaceCounting - table.ColumnGAP > strlen(TableHeader[next]) + table.ColumnGAP)) {
-                    printf(" ");
-                } else if (next < len) {
-                    printf("%s", TableHeader[next]);
-                    for (int k = 0; k < table.ColumnGAP; k++) {
-                        printf(" ");
+            if (root != NULL)
+            {
+                char yearStr[5];
+                snprintf(yearStr, sizeof(yearStr), "%d", year);
+                cJSON *yearObj = cJSON_GetObjectItem(root, yearStr);
+                if (yearObj != NULL)
+                {
+                    char monthStr[3];
+                    snprintf(monthStr, sizeof(monthStr), "%02d", month);
+                    cJSON *monthObj = cJSON_GetObjectItem(yearObj, monthStr);
+                    if (monthObj != NULL)
+                    {
+                        calculateColumnWidths(7, columnNames, columnWidths);
+                        createTableHeader(7, columnNames, columnWidths);
+                        createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
                     }
-                    j += (strlen(TableHeader[next]) + table.ColumnGAP - 1);
-                    SpaceCounting += ((strlen(TableHeader[next])) + table.ColumnGAP - 1);
+                    else
+                    {
+                        printf("No expenses available in this month.\n");
+                    }
                 }
-                SpaceCounting++;
+                else
+                {
+                    printf("No expenses available in this year.\n");
+                }
+                cJSON_Delete(root);
+            }
+            else
+            {
+                printf("Error: Failed to parse JSON data.\n");
             }
         }
-        printf("\n");
+        else
+        {
+            printf("No data available.\n");
+        }
+    }
+    else
+    {
+        printf("Error: Failed to open the file.\n");
     }
 }
 
-// Function to create table body
-void createTB(CustomTable table, char** TableHeader, char** DataRow, int len) {
-    int total_Table_Length = 0;
-    for (int i = 0; i < len; i++) {
-        total_Table_Length += (table.ColumnGAP * 3 + strlen(TableHeader[i]));
+void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 5;
+    // calculate spaces based on padding
+    char spaces[padding + 1];
+
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
     }
-    total_Table_Length++;
+    spaces[padding] = '\0';
 
-    int SpaceCounting = 0;
-    int next = 0;
-    int SpaceBetweenColumns = 0;
+    cJSON *dayObj = monthObj->child;
+    while (dayObj != NULL)
+    {
+        cJSON *expenseObj = dayObj->child;
+        while (expenseObj != NULL)
+        {
+            // Extract the expense information
+            char year[80], month[80], day[80], ID[80], category[80], description[80];
+            long amount;
 
-    for (int i = 0; i < total_Table_Length; i++) {
-        if (next < len && SpaceCounting - table.ColumnGAP == strlen(TableHeader[next]) + table.ColumnGAP * 2) {
-            printf("|");
-            SpaceCounting = 1;
-            next++;
-            if (next < len)
-                SpaceBetweenColumns = table.ColumnGAP * 2 + 1 + strlen(TableHeader[next]);
-        } else {
-            if (i == 0) {
-                printf("|");
-                SpaceBetweenColumns = table.ColumnGAP * 2 + 1 + strlen(TableHeader[next]);
-            } else {
-                for (int j = 0; j < table.ColumnGAP + 1; j++) {
-                    printf(" ");
-                }
-                printf("%s", DataRow[next]);
-                for (int j = 0; j < SpaceBetweenColumns - strlen(DataRow[next]) - table.ColumnGAP - 1; j++) {
-                    printf(" ");
-                }
+            strcpy(year, yearObj->string);
+            strcpy(month, monthObj->string);
+            strcpy(day, dayObj->string);
+            strcpy(ID, expenseObj->string);
 
-                SpaceCounting += (SpaceBetweenColumns - 1);
-                i += (SpaceBetweenColumns - 1);
+            cJSON *amountObj = cJSON_GetObjectItem(expenseObj, "amount");
+            if (amountObj != NULL)
+            {
+                amount = amountObj->valueint;
             }
-            SpaceCounting++;
+
+            cJSON *categoryObj = cJSON_GetObjectItem(expenseObj, "category");
+            if (categoryObj != NULL)
+            {
+                strcpy(category, categoryObj->valuestring);
+            }
+
+            cJSON *descriptionObj = cJSON_GetObjectItem(expenseObj, "description");
+            if (descriptionObj != NULL)
+            {
+                strcpy(description, descriptionObj->valuestring);
+            }
+
+            // Print the expense information in the table
+            printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*ld%s|%*s%s|%*s%s|\n",
+                   columnWidths[0], year, spaces,
+                   columnWidths[1], month, spaces,
+                   columnWidths[2], day, spaces,
+                   columnWidths[3], ID, spaces,
+                   columnWidths[4], amount, spaces,
+                   columnWidths[5], category, spaces,
+                   columnWidths[6], description, spaces);
+
+            createTableSeparator(7, columnWidths);
+
+            expenseObj = expenseObj->next;
         }
+
+        dayObj = dayObj->next;
+    }
+}
+
+void printQuarterlyExpenses()
+{
+    int quarter, year;
+    printf("Enter the year: ");
+    scanf("%d", &year);
+    quarter = printQuarterlyChoice();
+
+    // Load and parse the JSON data
+    FILE *fp = fopen("testCache.json", "r");
+    if (fp != NULL)
+    {
+        fseek(fp, 0, SEEK_END);
+        long file_size = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        if (file_size > 0)
+        {
+            char *json_str = (char *)malloc(file_size + 1);
+            fread(json_str, 1, file_size, fp);
+            fclose(fp);
+
+            cJSON *root = cJSON_Parse(json_str);
+            free(json_str);
+
+            if (root != NULL)
+            {
+                char yearStr[5];
+                snprintf(yearStr, sizeof(yearStr), "%d", year);
+                cJSON *yearObj = cJSON_GetObjectItem(root, yearStr);
+                if (yearObj != NULL)
+                {
+                    cJSON *startMonthObj, *endMonthObj;
+                    int startMonth, endMonth;
+
+                    switch (quarter)
+                    {
+                    case 1:
+                        startMonth = 1;
+                        endMonth = 3;
+                        break;
+                    case 2:
+                        startMonth = 4;
+                        endMonth = 6;
+                        break;
+                    case 3:
+                        startMonth = 7;
+                        endMonth = 9;
+                        break;
+                    case 4:
+                        startMonth = 10;
+                        endMonth = 12;
+                        break;
+                    default:
+                        printf("Invalid quarter choice.\n");
+                        cJSON_Delete(root);
+                        return;
+                    }
+
+                    calculateColumnWidths(7, columnNames, columnWidths);
+                    createTableHeader(7, columnNames, columnWidths);
+                    createTableBodyQuarterly(yearObj, startMonth, endMonth, 7, columnNames, columnWidths);
+                }
+                else
+                {
+                    printf("No expenses available in this year.\n");
+                }
+                cJSON_Delete(root);
+            }
+            else
+            {
+                printf("Error: Failed to parse JSON data.\n");
+            }
+        }
+        else
+        {
+            printf("No data available.\n");
+        }
+    }
+    else
+    {
+        printf("Error: Failed to open the file.\n");
+    }
+}
+
+void createTableBodyQuarterly(cJSON *yearObj, int startMonth, int endMonth, int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 5;
+    char spaces[padding + 1];
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
+    }
+    spaces[padding] = '\0';
+
+    char startMonthStr[3], endMonthStr[3];
+    snprintf(startMonthStr, sizeof(startMonthStr), "%02d", startMonth);
+    snprintf(endMonthStr, sizeof(endMonthStr), "%02d", endMonth);
+
+    cJSON *monthObj = yearObj->child;
+    while (monthObj != NULL)
+    {
+        if (strcmp(monthObj->string, startMonthStr) >= 0 && strcmp(monthObj->string, endMonthStr) <= 0)
+        {
+            createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
+        }
+        monthObj = monthObj->next;
+    }
+}
+
+int printQuarterlyChoice()
+{
+    printf("Choose a quarter:\n");
+    printf("1. Q1\n");
+    printf("2. Q2\n");
+    printf("3. Q3\n");
+    printf("4. Q4\n");
+    printf("Your choice: ");
+    int choice;
+    scanf("%d", &choice);
+    return choice;
+}
+
+void printYearlyExpenses()
+{
+    int year;
+    printf("Enter the year: ");
+    scanf("%d", &year);
+
+    // Load and parse the JSON data
+    FILE *fp = fopen("testCache.json", "r");
+    if (fp != NULL)
+    {
+        fseek(fp, 0, SEEK_END);
+        long file_size = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        if (file_size > 0)
+        {
+            char *json_str = (char *)malloc(file_size + 1);
+            fread(json_str, 1, file_size, fp);
+            fclose(fp);
+
+            cJSON *root = cJSON_Parse(json_str);
+            free(json_str);
+
+            if (root != NULL)
+            {
+                char yearStr[5];
+                snprintf(yearStr, sizeof(yearStr), "%d", year);
+                cJSON *yearObj = cJSON_GetObjectItem(root, yearStr);
+                if (yearObj != NULL)
+                {
+                    calculateColumnWidths(7, columnNames, columnWidths);
+                    createTableHeader(7, columnNames, columnWidths);
+                    createTableBodyYearly(yearObj, 7, columnNames, columnWidths);
+                }
+                else
+                {
+                    printf("No expenses available in this year.\n");
+                }
+                cJSON_Delete(root);
+            }
+            else
+            {
+                printf("Error: Failed to parse JSON data.\n");
+            }
+        }
+        else
+        {
+            printf("No data available.\n");
+        }
+    }
+    else
+    {
+        printf("Error: Failed to open the file.\n");
+    }
+}
+
+void createTableBodyYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 5;
+    // calculate spaces based on padding
+    char spaces[padding + 1];
+
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
+    }
+    spaces[padding] = '\0';
+
+    cJSON *monthObj = yearObj->child;
+    while (monthObj != NULL)
+    {
+        createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
+        monthObj = monthObj->next;
+    }
+}
+
+void printAllExpenses()
+{
+    system("./new.sh");
+
+    calculateColumnWidths(7, columnNames, columnWidths);
+
+    createTableHeader(7, columnNames, columnWidths);
+
+    // Load and parse the JSON data
+    FILE *fp = fopen("testCache.json", "r");
+    if (fp != NULL)
+    {
+        fseek(fp, 0, SEEK_END);
+        long file_size = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        if (file_size > 0)
+        {
+            char *json_str = (char *)malloc(file_size + 1);
+            fread(json_str, 1, file_size, fp);
+            fclose(fp);
+
+            cJSON *root = cJSON_Parse(json_str);
+            free(json_str);
+
+            if (root != NULL)
+            {
+                createTableBodyAll(root, 7, columnNames, columnWidths);
+                cJSON_Delete(root);
+            }
+            else
+            {
+                printf("Error: Failed to parse JSON data.\n");
+            }
+        }
+        else
+        {
+            printf("No data available.\n");
+        }
+    }
+    else
+    {
+        printf("Error: Failed to open the file.\n");
+    }
+}
+
+void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 5;
+    // calculate spaces based on padding
+    char spaces[padding + 1];
+
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
+    }
+    spaces[padding] = '\0';
+    cJSON *yearObj = root->child;
+    while (yearObj != NULL)
+    {
+        cJSON *monthObj = yearObj->child;
+        while (monthObj != NULL)
+        {
+            cJSON *dayObj = monthObj->child;
+            while (dayObj != NULL)
+            {
+                cJSON *expenseObj = dayObj->child;
+                while (expenseObj != NULL)
+                {
+                    // Extract the expense information
+                    char year[80], month[80], day[80], ID[80], category[80], description[80];
+                    long amount;
+
+                    strcpy(year, yearObj->string);
+                    strcpy(month, monthObj->string);
+                    strcpy(day, dayObj->string);
+                    strcpy(ID, expenseObj->string);
+
+                    cJSON *amountObj = cJSON_GetObjectItem(expenseObj, "amount");
+                    if (amountObj != NULL)
+                    {
+                        amount = amountObj->valueint;
+                    }
+
+                    cJSON *categoryObj = cJSON_GetObjectItem(expenseObj, "category");
+                    if (categoryObj != NULL)
+                    {
+                        strcpy(category, categoryObj->valuestring);
+                    }
+
+                    cJSON *descriptionObj = cJSON_GetObjectItem(expenseObj, "description");
+                    if (descriptionObj != NULL)
+                    {
+                        strcpy(description, descriptionObj->valuestring);
+                    }
+
+                    // Print the expense information in the table
+                    printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*ld%s|%*s%s|%*s%s|\n",
+                           columnWidths[0], year, spaces,
+                           columnWidths[1], month, spaces,
+                           columnWidths[2], day, spaces,
+                           columnWidths[3], ID, spaces,
+                           columnWidths[4], amount, spaces,
+                           columnWidths[5], category, spaces,
+                           columnWidths[6], description, spaces);
+
+                    createTableSeparator(7, columnWidths);
+
+                    expenseObj = expenseObj->next;
+                }
+
+                dayObj = dayObj->next;
+            }
+
+            monthObj = monthObj->next;
+        }
+
+        yearObj = yearObj->next;
+    }
+}
+
+void printCustomExpenses()
+{
+    char startDatee[11], endDatee[11];
+    printf("Enter the start date (DD-MM-YYYY): ");
+    scanf("%s", startDatee);
+    printf("Enter the end date (DD-MM-YYYY): ");
+    scanf("%s", endDatee);
+
+    // Load and parse the JSON data
+    FILE *fp = fopen("testCache.json", "r");
+    if (fp != NULL)
+    {
+        fseek(fp, 0, SEEK_END);
+        long file_size = ftell(fp);
+        fseek(fp, 0, SEEK_SET);
+
+        if (file_size > 0)
+        {
+            char *json_str = (char *)malloc(file_size + 1);
+            fread(json_str, 1, file_size, fp);
+            fclose(fp);
+
+            cJSON *root = cJSON_Parse(json_str);
+            free(json_str);
+
+            if (root != NULL)
+            {
+                calculateColumnWidths(7, columnNames, columnWidths);
+                createTableHeader(7, columnNames, columnWidths);
+                separateDate(startDatee, 1);
+                separateDate(endDatee, 2);
+                createTableBodyCustom(root, 7, columnNames, columnWidths);
+                cJSON_Delete(root);
+            }
+            else
+            {
+                printf("Error: Failed to parse JSON data.\n");
+            }
+        }
+        else
+        {
+            printf("No data available.\n");
+        }
+    }
+    else
+    {
+        printf("Error: Failed to open the file.\n");
+    }
+}
+
+void createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 5;
+    char spaces[padding + 1];
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
+    }
+    spaces[padding] = '\0';
+
+    cJSON *yearObj = root->child;
+    while (yearObj != NULL)
+    {
+        if (strcmp(yearObj->string, startDate.year) >= 0 && strcmp(yearObj->string, endDate.year) <= 0)
+        {
+            cJSON *monthObj = yearObj->child;
+            while (monthObj != NULL)
+            {
+                if (strcmp(monthObj->string, startDate.month) >= 0 && strcmp(monthObj->string, endDate.month) <= 0)
+                {
+                    cJSON *dayObj = monthObj->child;
+                    while (dayObj != NULL)
+                    {
+                        if (strcmp(dayObj->string, startDate.day) >= 0 && strcmp(dayObj->string, endDate.day) <= 0)
+                        {
+                            cJSON *expenseObj = dayObj->child;
+                            while (expenseObj != NULL)
+                            {
+                                // Extract the expense information
+                                char year[80], month[80], day[80], ID[80], category[80], description[80];
+                                long amount;
+
+                                strcpy(year, yearObj->string);
+                                strcpy(month, monthObj->string);
+                                strcpy(day, dayObj->string);
+                                strcpy(ID, expenseObj->string);
+
+                                cJSON *amountObj = cJSON_GetObjectItem(expenseObj, "amount");
+                                if (amountObj != NULL)
+                                {
+                                    amount = amountObj->valueint;
+                                }
+
+                                cJSON *categoryObj = cJSON_GetObjectItem(expenseObj, "category");
+                                if (categoryObj != NULL)
+                                {
+                                    strcpy(category, categoryObj->valuestring);
+                                }
+
+                                cJSON *descriptionObj = cJSON_GetObjectItem(expenseObj, "description");
+                                if (descriptionObj != NULL)
+                                {
+                                    strcpy(description, descriptionObj->valuestring);
+                                }
+
+                                // Print the expense information in the table
+                                printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*ld%s|%*s%s|%*s%s|\n",
+                                       columnWidths[0], year, spaces,
+                                       columnWidths[1], month, spaces,
+                                       columnWidths[2], day, spaces,
+                                       columnWidths[3], ID, spaces,
+                                       columnWidths[4], amount, spaces,
+                                       columnWidths[5], category, spaces,
+                                       columnWidths[6], description, spaces);
+                                createTableSeparator(7, columnWidths);
+
+                                expenseObj = expenseObj->next;
+                            }
+                        }
+
+                        dayObj = dayObj->next;
+                    }
+                }
+
+                monthObj = monthObj->next;
+            }
+        }
+
+        yearObj = yearObj->next;
+    }
+}
+
+void createTableHeader(int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 5;
+    // calculate spaces based on padding
+    char spaces[padding + 1];
+
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
+    }
+    // add padding to columnWidths
+    for (int i = 0; i < columnCount; i++)
+    {
+        columnWidths[i] += padding;
+    }
+
+    // print headlines consisting of dashes based on columnWidths
+    printf("+");
+    // also print a plus sign whenever there is a column
+    for (int i = 0; i < columnCount; i++)
+    {
+        for (int j = 0; j < columnWidths[i] + padding; j++)
+        {
+            printf("-");
+        }
+        printf("+");
+    }
+
+    printf("\n");
+
+    printf("|");
+
+    for (int i = 0; i < columnCount; i++)
+    {
+        printf("%*s%s|", columnWidths[i], columnNames[i], spaces);
+    }
+    printf("\n");
+
+    printf("+");
+
+    for (int i = 0; i < columnCount; i++)
+    {
+        for (int j = 0; j < columnWidths[i] + padding; j++)
+        {
+            printf("-");
+        }
+        printf("+");
     }
     printf("\n");
 }
 
-// Function to create table footer
-void createTF(CustomTable table, char** TableFooter, int len) {
-    int total_Table_Length = 0;
-    for (int i = 0; i < len; i++) {
-        total_Table_Length += (table.ColumnGAP * 3 + strlen(TableFooter[i]));
-    }
-    total_Table_Length++;
-
-    int SpaceCounting = 0;
-    int next = 0;
-
-    for (int j = 0; j < total_Table_Length; j++) {
-        if (next < len && SpaceCounting - table.ColumnGAP == (strlen(TableFooter[next]) + table.ColumnGAP * 2)) {
-            printf("+");
-            SpaceCounting = 1;
-            next++;
-        } else {
-            if (j == 0) {
-                printf("+");
-            } else {
-                printf("-");
+void separateDate(char input[], int choice)
+{
+    char *token = strtok(input, "/");
+    int count = 0;
+    if (choice == 1)
+    {
+        while (token != NULL)
+        {
+            if (count == 0)
+            {
+                strcpy(startDate.day, token);
             }
-            SpaceCounting++;
+            else if (count == 1)
+            {
+                strcpy(startDate.month, token);
+            }
+            else if (count == 2)
+            {
+                strcpy(startDate.year, token);
+            }
+            token = strtok(NULL, "/");
+            count++;
         }
+    }
+    else if (choice == 2)
+    {
+        while (token != NULL)
+        {
+            if (count == 0)
+            {
+                strcpy(endDate.day, token);
+            }
+            else if (count == 1)
+            {
+                strcpy(endDate.month, token);
+            }
+            else if (count == 2)
+            {
+                strcpy(endDate.year, token);
+            }
+            token = strtok(NULL, "/");
+            count++;
+        }
+    }
+}
+
+void createTableSeparator(int columnCount, int columnWidths[])
+{
+    printf("+");
+    for (int i = 0; i < columnCount; i++)
+    {
+        for (int j = 0; j < columnWidths[i] + 5; j++)
+        {
+            printf("-");
+        }
+        printf("+");
     }
     printf("\n");
 }
 
-// Function to create a line break
-void createHR() {
-    printf("\n-------------------------------------------------------\n");
-}
-
-int main() {
-    // Example usage
-    CustomTable table = createCustomTable();
-    char* menuOptions[] = {"Option 1", "Option 2", "Option 3"};
-    char* tableHeader[] = {"Header 1", "Header 2", "Header 3"};
-    char* tableData[] = {"Data 1", "Data 2", "Data 3"};
-    char* tableFooter[] = {"Footer 1", "Footer 2", "Footer 3"};
-
-    char* userChoice = createMenu(table, "Menu Title", menuOptions, table.DATA, 3);
-    printf("User choice: %s\n", userChoice);
-
-    char* yesNoChoice = YesNoStatement("Yes or No?");
-    printf("User choice: %s\n", yesNoChoice);
-
-    createTH(table, tableHeader, 3);
-    createTB(table, tableHeader, tableData, 3);
-    createTF(table, tableFooter, 3);
-    createHR();
-
-    return 0;
+int *calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[])
+{
+    for (int i = 0; i < columnCount; i++)
+    {
+        columnWidths[i] = strlen(columnNames[i]);
+    }
+    return columnWidths;
 }
