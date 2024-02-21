@@ -9,7 +9,6 @@
 
 
 void printMenu();
-// int fun(char date[]);
 void enterExpenses();
 void listExpenses();
 void printDateChoice();
