@@ -74,6 +74,11 @@
 			"21":	{
 			},
 			"22":	{
+				"ex1":	{
+					"amount":	1,
+					"category":	"Food",
+					"description":	"1"
+				}
 			},
 			"23":	{
 			},
