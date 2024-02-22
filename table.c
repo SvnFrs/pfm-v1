@@ -21,6 +21,7 @@ struct Date
 
 int listExpenses()
 {
+    printf("List expenses\n");
     printf("Choose an option:\n");
     printf("1. Print monthly expenses\n");
     printf("2. Print quarterly expenses\n");
