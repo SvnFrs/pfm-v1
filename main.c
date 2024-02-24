@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "listExpenses.h"
+#include "statisticizeExpenses.h"
 #include "save.h"
 #include "table.h"
 
@@ -70,6 +71,7 @@ int main()
             break;
         case 3:
             printf("Statistic total expenses\n");
+            listStatistics();
             break;
         case 4:
             printf("Options\n");
