@@ -12,7 +12,15 @@ gcc -c table.c -o table.o
 ```
 
 ```shell
-gcc main.c save.o table.o -o main -lcjson
+gcc -c listExpenses.c -o listExpenses.o
+```
+
+```shell
+gcc -c  statisticizeExpenses.c -o statisticizeExpenses.o
+```
+
+```shell
+gcc main.c save.o table.o listExpenses.o statisticizeExpenses.o -o main -lcjson  
 ```
 
 ## TODO
@@ -21,10 +29,9 @@ gcc main.c save.o table.o -o main -lcjson
 - [x] Auto generate the month and its days if not exists in the data.  
 - [x] List all the expenses in the data file with specific table format.
 - [x] Update table format to be more precise and clear.
-- [ ] Add another data file to store the expenses with quarter period.
 - [x] Create table method specific for the period of time.
 - [ ] Add the ability to delete an expense from the data file.
 - [ ] Add the ability to update an expense from the data file.
 - [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
 - [x] Add the ability to list all the expenses in the data file for a specific period.
-- [ ] List statistics for the expenses in the data file by month / quarter / year.
+- [x] List statistics for the expenses in the data file by month.
