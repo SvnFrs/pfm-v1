@@ -3,7 +3,7 @@
 #include <cjson/cJSON.h>
 #include <stdlib.h>
 #include <string.h>
-
+#include "listExpenses.h"
 #include "save.h"
 #include "table.h"
 
