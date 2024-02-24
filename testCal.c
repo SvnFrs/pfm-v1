@@ -9,12 +9,13 @@
 char *columnNames[] = {"Year", "Month", "Status", "Amount"};
 int columnWidths[7];
 char year[80], month[80], day[80], ID[80], status[80];
-char* exist = "A";
+char* exist = "X";
 char* notExist = "N/A";
 long amount;
 
 int listStatistics()
-{   int year;
+{
+    int year;
     printf("List expenses statistics\n");
     printf("Enter the year: ");
     scanf("%d", &year);
@@ -66,19 +67,20 @@ int listStatistics()
     else
     {
         printf("Error: Failed to open the file.\n");
-    }    
+    }
 }
 
-void statisticizeExpensesMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[]) {
+void statisticizeExpensesMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
+{
     int padding = 5;
-    // calculate spaces based on padding
     char spaces[padding + 1];
-
     for (int i = 0; i < padding; i++)
     {
         spaces[i] = ' ';
     }
     spaces[padding] = '\0';
+
+    long totalAmount = 0;
 
     cJSON *dayObj = monthObj->child;
     while (dayObj != NULL)
@@ -88,37 +90,33 @@ void statisticizeExpensesMonthly(cJSON *yearObj, cJSON *monthObj, int columnCoun
         {
             // Extract the expense information
             strcpy(year, yearObj->string);
-            strcpy(month, monthObj->string);
             strcpy(day, dayObj->string);
             strcpy(ID, expenseObj->string);
 
             cJSON *amountObj = cJSON_GetObjectItem(expenseObj, "amount");
             if (amountObj != NULL)
             {
-                amount = amountObj->valueint;
+                totalAmount += amountObj->valueint;
             }
-
-            // Print the expense information in the table
-            printf("|%*s%s|%*s%s|%*s%s|%*ld%s|\n",
-                   columnWidths[0], year, spaces,
-                   columnWidths[1], month, spaces,
-                   columnWidths[2], status, spaces,
-                   columnWidths[3], amount, spaces);
-
-            createTableSeparator(4, columnWidths);
 
             expenseObj = expenseObj->next;
         }
 
         dayObj = dayObj->next;
     }
+
+    // Print the expense information in the table
+    printf("|%*s%s|%*s%s|%*s%s|%*ld%s|\n",
+           columnWidths[0], yearObj->string, spaces,
+           columnWidths[1], monthObj->string, spaces,
+           columnWidths[2], (totalAmount > 0 ? exist : notExist), spaces,
+           columnWidths[3], totalAmount, spaces);
 }
 
-void statisticizeExpensesYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[]) {
+void statisticizeExpensesYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[])
+{
     int padding = 5;
-    // calculate spaces based on padding
     char spaces[padding + 1];
-
     for (int i = 0; i < padding; i++)
     {
         spaces[i] = ' ';
@@ -126,14 +124,30 @@ void statisticizeExpensesYearly(cJSON *yearObj, int columnCount, char *columnNam
     spaces[padding] = '\0';
 
     cJSON *monthObj = yearObj->child;
-    while (monthObj != NULL)
+
+    for (int month = 1; month <= 12; month++)
     {
-        statisticizeExpensesMonthly(yearObj, monthObj, 4, columnNames, columnWidths);
-        monthObj = monthObj->next;
+        if (monthObj != NULL && atoi(monthObj->string) == month)
+        {
+            statisticizeExpensesMonthly(yearObj, monthObj, 4, columnNames, columnWidths);
+            monthObj = monthObj->next;
+        }
+        else
+        {
+            // Print the month with no expenses
+            printf("|%*s%s|%*d%s|%*s%s|%*d%s|\n",
+                   columnWidths[0], year, spaces,
+                   columnWidths[1], month, spaces,
+                   columnWidths[2], notExist, spaces,
+                   columnWidths[3], 0, spaces);
+        }
+
+        createTableSeparator(4, columnWidths);
     }
 }
 
-int main() {
+int main()
+{
     listStatistics();
     return 0;
 }
