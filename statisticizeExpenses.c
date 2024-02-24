@@ -1,17 +1,11 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <cjson/cJSON.h>
-#include "testCal.h"
-#include "table.h"
+#include "statisticizeExpenses.h"
 
-char *columnNames[] = {"Year", "Month", "Status", "Amount"};
-int columnWidths[7];
-char year[80], month[80], day[80], ID[80], status[80];
+char *statisticColumnNames[] = {"Year", "Month", "Status", "Amount"};
+int statisticColumnWidths[7];
+char statisticYear[80], statisticMonth[80], statisticDay[80], statisticID[80], statisticStatus[80];
 char* exist = "X";
 char* notExist = "N/A";
-long amount;
+long statisticAmount;
 
 int listStatistics()
 {
@@ -44,9 +38,9 @@ int listStatistics()
                 cJSON *yearObj = cJSON_GetObjectItem(root, yearStr);
                 if (yearObj != NULL)
                 {
-                    calculateColumnWidths(4, columnNames, columnWidths);
-                    createTableHeader(4, columnNames, columnWidths);
-                    statisticizeExpensesYearly(yearObj, 4, columnNames, columnWidths);
+                    calculateColumnWidths(4, statisticColumnNames, statisticColumnWidths);
+                    createTableHeader(4, statisticColumnNames, statisticColumnWidths);
+                    statisticizeExpensesYearly(yearObj, 4, statisticColumnNames, statisticColumnWidths);
                 }
                 else
                 {
@@ -89,9 +83,9 @@ void statisticizeExpensesMonthly(cJSON *yearObj, cJSON *monthObj, int columnCoun
         while (expenseObj != NULL)
         {
             // Extract the expense information
-            strcpy(year, yearObj->string);
-            strcpy(day, dayObj->string);
-            strcpy(ID, expenseObj->string);
+            strcpy(statisticYear, yearObj->string);
+            strcpy(statisticDay, dayObj->string);
+            strcpy(statisticID, expenseObj->string);
 
             cJSON *amountObj = cJSON_GetObjectItem(expenseObj, "amount");
             if (amountObj != NULL)
@@ -136,18 +130,12 @@ void statisticizeExpensesYearly(cJSON *yearObj, int columnCount, char *columnNam
         {
             // Print the month with no expenses
             printf("|%*s%s|%*d%s|%*s%s|%*d%s|\n",
-                   columnWidths[0], year, spaces,
-                   columnWidths[1], month, spaces,
+                   columnWidths[0], statisticYear, spaces,
+                   columnWidths[1], statisticMonth, spaces,
                    columnWidths[2], notExist, spaces,
                    columnWidths[3], 0, spaces);
         }
 
         createTableSeparator(4, columnWidths);
     }
-}
-
-int main()
-{
-    listStatistics();
-    return 0;
 }
