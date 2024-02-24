@@ -4,8 +4,6 @@
 #include <stdbool.h>
 #include <cjson/cJSON.h>
 
-#include "save.h"
-
 // Function to check if a year is a leap year
 bool isLeapYear(int year) {
     if (year % 4 != 0) {
@@ -74,16 +72,25 @@ int save(char day[80], char month[80], char year[80], char category[80], char de
     if (yearObj == NULL) {
         yearObj = cJSON_CreateObject();
         cJSON_AddItemToObject(root, year, yearObj);
+
+        // Generate a skeleton of months for the year
+        for (int month = 1; month <= 12; month++) {
+            char monthStr[3];
+            snprintf(monthStr, sizeof(monthStr), "%02d", month);
+            cJSON *monthObj = cJSON_CreateObject();
+            cJSON_AddItemToObject(yearObj, monthStr, monthObj);
+
+            // Generate a skeleton of days for the month
+            int lastDay = getLastDayOfMonth(month, atoi(year));
+            generateSkeletonDays(monthObj, lastDay);
+        }
     }
 
     cJSON *monthObj = cJSON_GetObjectItem(yearObj, month);
     if (monthObj == NULL) {
-        monthObj = cJSON_CreateObject();
-        cJSON_AddItemToObject(yearObj, month, monthObj);
-
-        // Generate a skeleton of days for the month
-        int lastDay = getLastDayOfMonth(atoi(month), atoi(year));
-        generateSkeletonDays(monthObj, lastDay);
+        printf("Error: The specified month '%s' does not exist.\n", month);
+        cJSON_Delete(root);
+        return 1;
     }
 
     cJSON *dayObj = cJSON_GetObjectItem(monthObj, day);
