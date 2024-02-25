@@ -6,6 +6,7 @@ int columnWidths[7];
 char year[80], month[80], day[80], ID[80], category[80], description[80];
 long amount;
 
+
 // Struct to store the start and end date
 struct Date
 {
