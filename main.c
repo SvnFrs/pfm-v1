@@ -51,7 +51,7 @@ int main()
         if (scanf("%d", &choice) != 1)
         {
             // If scanf fails to read an integer
-            printf("Invalid input. Please enter a valid integer.\n");
+            printf("Invalid input. Please enter a valid choice.\n");
             invalidChoice = 1;
             // Clear the input buffer to prevent an infinite loop on invalid input
             while (getchar() != '\n')
