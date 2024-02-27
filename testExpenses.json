@@ -123,6 +123,11 @@
 			"26":	{
 			},
 			"27":	{
+				"ex1":	{
+					"amount":	20000,
+					"category":	"Food",
+					"description":	"Mua coca"
+				}
 			},
 			"28":	{
 			},
