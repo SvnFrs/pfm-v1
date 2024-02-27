@@ -6,6 +6,7 @@
 #include "table.h"
 
 extern int listExpenses();
+extern void printListExpensesMenu();
 extern void printAllExpenses();
 extern void printMonthlyExpenses();
 extern void printQuarterlyExpenses();

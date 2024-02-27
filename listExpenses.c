@@ -6,7 +6,6 @@ int columnWidths[7];
 char year[80], month[80], day[80], ID[80], category[80], description[80];
 long amount;
 
-
 // Struct to store the start and end date
 struct Date
 {
@@ -17,37 +16,61 @@ struct Date
 
 int listExpenses()
 {
-    printf("List expenses\n");
-    printf("Choose an option:\n");
-    printf("1. Print monthly expenses\n");
-    printf("2. Print quarterly expenses\n");
-    printf("3. Print yearly expenses\n");
-    printf("4. Print all expenses\n");
-    printf("5. Print custom expenses\n");
-    printf("Your choice: ");
-    int choice;
-    scanf("%d", &choice);
-    switch (choice)
+    int choice, invalidChoice;
+    // scanf("%d", &choice);
+
+    do
     {
-    case 1:
-        printMonthlyExpenses();
-        break;
-    case 2:
-        printQuarterlyExpenses();
-        break;
-    case 3:
-        printYearlyExpenses();
-        break;
-    case 4:
-        printAllExpenses();
-        break;
-    case 5:
-        printCustomExpenses();
-        break;
-    default:
-        printf("Invalid choice\n");
-        break;
-    }
+        invalidChoice = 0; // Reset the flag for each iteration
+        printListExpensesMenu();
+        if (scanf("%d", &choice) != 1)
+        {
+            // If scanf fails to read an integer
+            printf("Invalid input. Please enter a valid choice.\n");
+            invalidChoice = 1;
+            // Clear the input buffer to prevent an infinite loop on invalid input
+            while (getchar() != '\n')
+                ;
+            continue;
+        }
+
+        switch (choice)
+        {
+        case 1:
+            printMonthlyExpenses();
+            break;
+        case 2:
+            printQuarterlyExpenses();
+            break;
+        case 3:
+            printYearlyExpenses();
+            break;
+        case 4:
+            printAllExpenses();
+            break;
+        case 5:
+            printCustomExpenses();
+            break;
+        default:
+            printf("Invalid choice\n");
+            break;
+        }
+
+    } while (choice > 5 || invalidChoice == 1);
+
+    return 0;
+}
+
+void printListExpensesMenu()
+{
+    printf("List expenses:\n");
+    printf("Choose an option:\n");
+    printf("1. Monthly\n");
+    printf("2. Quarterly\n");
+    printf("3. Yearly\n");
+    printf("4. All\n");
+    printf("5. Custom\n");
+    printf("Your choice: ");
 }
 
 void printMonthlyExpenses()
@@ -521,7 +544,7 @@ void printCustomExpenses()
             free(json_str);
 
             if (root != NULL)
-            {     
+            {
                 bool expensesFound = createTableBodyCustom(root, 7, columnNames, columnWidths);
 
                 if (expensesFound)
@@ -567,7 +590,7 @@ bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], in
     cJSON *yearObj = root->child;
 
     bool expensesPrinted = false; // Initialize a flag
-    
+
     while (yearObj != NULL)
     {
         if (strcmp(yearObj->string, startDate.year) >= 0 && strcmp(yearObj->string, endDate.year) <= 0)
@@ -621,7 +644,7 @@ bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], in
                                 createTableSeparator(7, columnWidths);
 
                                 expensesPrinted = true; // Set the flag to true
-                                
+
                                 expenseObj = expenseObj->next;
                             }
                         }
