@@ -193,7 +193,9 @@ void printCategoryChoice() {
 
 void printDescription() {
     printf("Enter expense description: ");
-    scanf("%s", expense.description);
+    // scanf("%s", expense.description);
+    // fgets(expense.description, sizeof(expense.description), stdin);
+    scanf(" %[^\n]s", expense.description);
 }
 
 char *getDate() {

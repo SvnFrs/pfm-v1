@@ -16,6 +16,7 @@ struct Date
 
 int listExpenses()
 {
+    system("./new.sh");
     int choice, invalidChoice;
     // scanf("%d", &choice);
 
@@ -63,7 +64,6 @@ int listExpenses()
 
 void printListExpensesMenu()
 {
-    printf("List expenses:\n");
     printf("Choose an option:\n");
     printf("1. Monthly\n");
     printf("2. Quarterly\n");
