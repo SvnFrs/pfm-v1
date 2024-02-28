@@ -10,6 +10,7 @@
 
 
 void printMenu();
+int startProgram();
 void enterExpenses();
 // void listExpenses();
 void printDateChoice();
@@ -40,8 +41,11 @@ const char * months[12] = {"January", "February", "March", "April", "May", "June
 
 int main()
 {
-    
-    int choice, invalidChoice;
+    startProgram();
+}
+
+int startProgram() {
+    int choice, invalidChoice, result;
     do
     {
         invalidChoice = 0; // Reset the flag for each iteration
@@ -67,11 +71,13 @@ int main()
             break;
         case 2:
             printf("List expenses\n");
-            listExpenses();
+            result = listExpenses();
+            result == 0 ? startProgram() : printf("Error listing expenses\n");
             break;
         case 3:
             printf("Statistic total expenses\n");
-            listStatistics();
+            result = listStatistics();
+            result == 0 ? startProgram() : printf("Error listing statistics\n");
             break;
         case 4:
             printf("Options\n");
@@ -115,7 +121,9 @@ void enterExpenses() {
     // printf("Year: %s\n", date.year);
     // saveExpense();   
     // testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
-    saveExpense();
+    int result = saveExpense();
+    result == 0 ? printf("Expense saved\n") : printf("Error saving expense\n");
+    startProgram();
 }
 void printDateChoice() {
     printf("What day should it be?\n");
@@ -274,42 +282,42 @@ void separateDate(char input[]) {
 //     printPeriodChoice();
 // }
 
-void printPeriodChoice() {
-    printf("Choose expense period\n");
-    printf("1. Monthly\n");
-    printf("2. Yearly\n");
-    printf("3. All\n");
-    printf("4. Custom\n");
-    printf("Your choice:");
-    int choice;
-    do
-    {
-        if (scanf("%d", &choice) != 1)
-        {
-            // If scanf fails to read an integer
-            printf("Invalid input. Please enter a valid integer.\n");
-            // Clear the input buffer to prevent an infinite loop on invalid input
-            while (getchar() != '\n')
-                ;
-            continue;
-        }
-    } while (choice > 4);
-    switch (choice)
-    {
-    case 1:
-        printf("You choose Monthly\n");
-        break;
-    case 2:
-        printf("You choose Yearly\n");
-        break;
-    case 3:
-        printf("You choose All\n");
-        break;
-    case 4:
-        printf("You choose Custom\n");
-        break;
-    default:
-        printf("Invalid choice\n");
-        break;
-    }
-}
+// void printPeriodChoice() {
+//     printf("Choose expense period\n");
+//     printf("1. Monthly\n");
+//     printf("2. Yearly\n");
+//     printf("3. All\n");
+//     printf("4. Custom\n");
+//     printf("Your choice:");
+//     int choice;
+//     do
+//     {
+//         if (scanf("%d", &choice) != 1)
+//         {
+//             // If scanf fails to read an integer
+//             printf("Invalid input. Please enter a valid integer.\n");
+//             // Clear the input buffer to prevent an infinite loop on invalid input
+//             while (getchar() != '\n')
+//                 ;
+//             continue;
+//         }
+//     } while (choice > 4);
+//     switch (choice)
+//     {
+//     case 1:
+//         printf("You choose Monthly\n");
+//         break;
+//     case 2:
+//         printf("You choose Yearly\n");
+//         break;
+//     case 3:
+//         printf("You choose All\n");
+//         break;
+//     case 4:
+//         printf("You choose Custom\n");
+//         break;
+//     default:
+//         printf("Invalid choice\n");
+//         break;
+//     }
+// }
