@@ -5,6 +5,10 @@
 #include <cjson/cJSON.h>
 #include "table.h"
 
+extern int getChoice(const char* prompt, int min, int max);
+extern int getInput(const char* prompt, int min, int max);
+extern int yearInput();
+extern int monthInput();
 extern int listExpenses();
 extern void printListExpensesMenu();
 extern void printAllExpenses();
@@ -21,4 +25,9 @@ extern bool createTableBodyCustom(cJSON *root, int columnCount, char *columnName
 extern void createTableSeparator(int columnCount, int columnWidths[]);
 extern int* calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[]);
 extern int printQuarterlyChoice();
-extern void separateSEDate();
+extern void separateStartDate();
+extern void separateEndDate();
+extern void getStartDateInput();
+extern void getEndDateInput();
+extern bool validateEndDateVSStartDate();
+extern bool validateDate();

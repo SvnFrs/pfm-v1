@@ -52,7 +52,7 @@ int startProgram() {
         printMenu();
         printf("Enter your choice: ");
 
-        if (scanf("%d", &choice) != 1)
+       if (scanf("%d", &choice) != 1 || getchar() != '\n')
         {
             // If scanf fails to read an integer
             printf("Invalid input. Please enter a valid choice.\n");
