@@ -66,6 +66,11 @@
 					"amount": 10000,
 					"category": "Food",
 					"description": "Mua nuoc"
+				},
+				"ex2": {
+					"amount": 20000,
+					"category": "Food",
+					"description": "Mua keo"
 				}
 			},
 			"29": {}
