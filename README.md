@@ -30,8 +30,8 @@ gcc main.c save.o table.o listExpenses.o statisticizeExpenses.o -o main -lcjson
 - [x] List all the expenses in the data file with specific table format.
 - [x] Update table format to be more precise and clear.
 - [x] Create table method specific for the period of time.
-- [ ] Add the ability to delete an expense from the data file.
-- [ ] Add the ability to update an expense from the data file.
+<!-- - [ ] Add the ability to delete an expense from the data file. -->
+<!-- - [ ] Add the ability to update an expense from the data file. -->
 - [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
 - [x] Add the ability to list all the expenses in the data file for a specific period.
 - [x] List statistics for the expenses in the data file by month.
