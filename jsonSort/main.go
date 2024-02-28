@@ -11,7 +11,7 @@ type ExpenseData map[string]map[string]map[string]interface{}
 
 func main() {
 	// read the JSON data from the file
-	file, err := os.ReadFile("../testExpenses.json")
+	file, err := os.ReadFile("../data/Expenses.json")
 	if err != nil {
 		fmt.Println("Error reading file:", err)
 		return
@@ -46,11 +46,11 @@ func main() {
 	}
 
 	// ưrite the sorted JSON to a new file
-	err = os.WriteFile("../testCache.json", sortedJSON, os.ModePerm)
+	err = os.WriteFile("../data/Cache.json", sortedJSON, os.ModePerm)
 	if err != nil {
 		fmt.Println("Error writing file:", err)
 		return
 	}
 
-	fmt.Println("Sorting completed. Sorted data is stored in 'testCache.json'.")
+	fmt.Println("Sorting completed. Sorted data is stored in 'data/Cache.json'.")
 }

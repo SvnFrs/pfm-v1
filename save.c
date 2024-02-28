@@ -37,7 +37,7 @@ void generateSkeletonDays(cJSON *monthObj, int lastDay) {
 
 int save(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
     cJSON *root = NULL;
-    FILE *fp = fopen("testExpenses.json", "r");
+    FILE *fp = fopen("data/Expenses.json", "r");
 
     if (fp != NULL) {
         // Load existing JSON data from the file
@@ -115,7 +115,7 @@ int save(char day[80], char month[80], char year[80], char category[80], char de
 
     // Save the updated JSON structure to the file
     char *json_str = cJSON_Print(root);
-    fp = fopen("testExpenses.json", "w");
+    fp = fopen("data/Expenses.json", "w");
     fprintf(fp, "%s", json_str);
     fclose(fp);
 

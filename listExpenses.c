@@ -82,7 +82,7 @@ void printMonthlyExpenses()
     scanf("%d", &month);
 
     // Load and parse the JSON data
-    FILE *fp = fopen("testCache.json", "r");
+    FILE *fp = fopen("data/Cache.json", "r");
     if (fp != NULL)
     {
         fseek(fp, 0, SEEK_END);
@@ -210,7 +210,7 @@ void printQuarterlyExpenses()
     quarter = printQuarterlyChoice();
 
     // Load and parse the JSON data
-    FILE *fp = fopen("testCache.json", "r");
+    FILE *fp = fopen("data/Cache.json", "r");
     if (fp != NULL)
     {
         fseek(fp, 0, SEEK_END);
@@ -331,7 +331,7 @@ void printYearlyExpenses()
     scanf("%d", &year);
 
     // Load and parse the JSON data
-    FILE *fp = fopen("testCache.json", "r");
+    FILE *fp = fopen("data/Cache.json", "r");
     if (fp != NULL)
     {
         fseek(fp, 0, SEEK_END);
@@ -409,7 +409,7 @@ void printAllExpenses()
     createTableHeader(7, columnNames, columnWidths);
 
     // Load and parse the JSON data
-    FILE *fp = fopen("testCache.json", "r");
+    FILE *fp = fopen("data/Cache.json", "r");
     if (fp != NULL)
     {
         fseek(fp, 0, SEEK_END);
@@ -527,7 +527,7 @@ void printCustomExpenses()
     scanf("%s", endDatee);
 
     // Load and parse the JSON data
-    FILE *fp = fopen("testCache.json", "r");
+    FILE *fp = fopen("data/Cache.json", "r");
     if (fp != NULL)
     {
         fseek(fp, 0, SEEK_END);

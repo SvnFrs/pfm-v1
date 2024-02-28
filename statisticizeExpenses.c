@@ -15,7 +15,7 @@ int listStatistics()
     scanf("%d", &year);
 
     // Load and parse the JSON data
-    FILE *fp = fopen("testCache.json", "r");
+    FILE *fp = fopen("data/Cache.json", "r");
     if (fp != NULL)
     {
         fseek(fp, 0, SEEK_END);
