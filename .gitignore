@@ -10,6 +10,8 @@ listExpenses.o
 
 statisticizeExpenses.o
 
+validate.o
+
 /save.o
 
 /table.o
