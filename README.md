@@ -16,11 +16,18 @@ gcc -c listExpenses.c -o listExpenses.o
 ```
 
 ```shell
+gcc -c validate.c -o validate.o    
+```
+
+<!-- ```shell -->
+<!-- ``` -->
+
+```shell
 gcc -c  statisticizeExpenses.c -o statisticizeExpenses.o
 ```
 
 ```shell
-gcc main.c save.o table.o listExpenses.o statisticizeExpenses.o -o main -lcjson  
+gcc main.c save.o table.o listExpenses.o statisticizeExpenses.o validate.o -o main -lcjson  
 ```
 
 ## TODO
@@ -38,3 +45,4 @@ gcc main.c save.o table.o listExpenses.o statisticizeExpenses.o -o main -lcjson
 - [ ] Enter expenses validation.
 - [ ] Statisticize expenses validation.
 - [ ] Abbreviate the ouput data.
+- [ ] Fix date validation.
