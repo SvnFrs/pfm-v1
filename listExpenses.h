@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <cjson/cJSON.h>
 #include "table.h"
+#include "validate.h"
 
 extern char *abbreviateMoney(long amount);
 extern int getChoice(const char* prompt, int min, int max);
