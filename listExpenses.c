@@ -3,7 +3,7 @@
 // Default column names and widths
 char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "Category", "Description"};
 int columnWidths[7];
-char year[80], month[80], day[80], ID[80], category[80], description[80];
+char year[80], month[80], day[80], ID[80], category[80], description[80], money[80];
 long amount;
 
 // Struct to store the start and end date
@@ -195,6 +195,7 @@ void printMonthlyExpenses()
 
 void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
 {
+    // char money[80];
     int padding = 5;
     // calculate spaces based on padding
     char spaces[padding + 1];
@@ -234,14 +235,17 @@ void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
             {
                 strcpy(description, descriptionObj->valuestring);
             }
+            
+            strcpy(money, abbreviateMoney(amount));
+            // printf("%s\n", money);
 
             // Print the expense information in the table
-            printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*ld%s|%*s%s|%*s%s|\n",
+            printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|\n",
                    columnWidths[0], year, spaces,
                    columnWidths[1], month, spaces,
                    columnWidths[2], day, spaces,
                    columnWidths[3], ID, spaces,
-                   columnWidths[4], amount, spaces,
+                   columnWidths[4], money, spaces,
                    columnWidths[5], category, spaces,
                    columnWidths[6], description, spaces);
 
@@ -253,6 +257,24 @@ void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
         dayObj = dayObj->next;
     }
 }
+
+char *abbreviateMoney(long amount)
+{
+    const char *suffixes[] = {"", "k", "m", "b"};
+    int index = 0;
+
+    while (amount >= 1000 && index < sizeof(suffixes) / sizeof(suffixes[0]) - 1)
+    {
+        amount /= 1000;
+        index++;
+    }
+
+    char *result = (char *)malloc(10 * sizeof(char));
+    snprintf(result, 10, "%ld%s", amount, suffixes[index]);
+
+    return result;
+}
+
 
 void printQuarterlyExpenses()
 {

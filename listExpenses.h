@@ -5,6 +5,7 @@
 #include <cjson/cJSON.h>
 #include "table.h"
 
+extern char *abbreviateMoney(long amount);
 extern int getChoice(const char* prompt, int min, int max);
 extern int getInput(const char* prompt, int min, int max);
 extern int yearInput();
