@@ -7,7 +7,7 @@
 #include "statisticizeExpenses.h"
 #include "save.h"
 #include "table.h"
-
+#include "validate.h"
 
 void printMenu();
 int startProgram();
@@ -15,7 +15,8 @@ void enterExpenses();
 // void listExpenses();
 void printDateChoice();
 void printExpenseAmount();
-void printCategoryChoice();
+int printCategoryChoice();
+void printCategoryChoiceMenu();
 void printDescription();
 void separateDate(char date[]);
 char *getDate();
@@ -37,14 +38,15 @@ struct Date
     char year[80];
 } date;
 
-const char * months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
+const char *months[12] = {"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"};
 
 int main()
 {
     startProgram();
 }
 
-int startProgram() {
+int startProgram()
+{
     int choice, invalidChoice, result;
     do
     {
@@ -52,7 +54,7 @@ int startProgram() {
         printMenu();
         printf("Enter your choice: ");
 
-       if (scanf("%d", &choice) != 1 || getchar() != '\n')
+        if (scanf("%d", &choice) != 1 || getchar() != '\n')
         {
             // If scanf fails to read an integer
             printf("Invalid input. Please enter a valid choice.\n");
@@ -105,8 +107,8 @@ void printMenu()
     printf("5. Exit\n");
 }
 
-
-void enterExpenses() {
+void enterExpenses()
+{
     printDateChoice();
     printExpenseAmount();
     printCategoryChoice();
@@ -119,13 +121,14 @@ void enterExpenses() {
     // printf("Day: %s\n", date.day);
     // printf("Month: %s\n", date.month);
     // printf("Year: %s\n", date.year);
-    // saveExpense();   
+    // saveExpense();
     // testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
     int result = saveExpense();
     result == 0 ? printf("Expense saved\n") : printf("Error saving expense\n");
     startProgram();
 }
-void printDateChoice() {
+void printDateChoice()
+{
     printf("What day should it be?\n");
     printf("1. Today\n");
     printf("2. Other\n");
@@ -136,7 +139,7 @@ void printDateChoice() {
     {
     case 1:
         char *today = getDate();
-        
+
         printf("Today is %s\n", today);
         strcpy(expense.date, today);
         // snprintf(expense.date, sizeof(expense.date), "%s", today);
@@ -144,7 +147,7 @@ void printDateChoice() {
         break;
     case 2:
         char *notToday = chooseDate();
-        printf("You choose %s\n", notToday);
+        // printf("You choose %s\n", notToday);
         strcpy(expense.date, notToday);
         // snprintf(expense.date, sizeof(expense.date), "%s", notToday);
         free(notToday);
@@ -155,13 +158,63 @@ void printDateChoice() {
     }
 }
 
-void printExpenseAmount() {
+void printExpenseAmount()
+{
     printf("Enter expense amount: ");
     scanf("%ld", &expense.amount);
     printf("Expense amount: %ld\n", expense.amount);
 }
 
-void printCategoryChoice() {
+int printCategoryChoice()
+{
+
+    int choice, invalidChoice;
+    do
+    {
+        invalidChoice = 0; // Reset the flag for each iteration
+        printCategoryChoiceMenu();
+        if (scanf("%d", &choice) != 1 || getchar() != '\n')
+        {
+            // If scanf fails to read an integer
+            printf("Invalid input. Please enter a valid choice.\n");
+            invalidChoice = 1;
+            // Clear the input buffer to prevent an infinite loop on invalid input
+            while (getchar() != '\n')
+                ;
+            continue;
+        }
+        scanf("%d", &choice);
+        switch (choice)
+        {
+        case 1:
+            printf("You choose Food\n");
+            strcpy(expense.category, "Food");
+            break;
+        case 2:
+            printf("You choose Transportation\n");
+            strcpy(expense.category, "Transportation");
+            break;
+        case 3:
+            printf("You choose Housing\n");
+            strcpy(expense.category, "Housing");
+            break;
+        case 4:
+            printf("You choose Entertainment\n");
+            strcpy(expense.category, "Entertainment");
+            break;
+        case 5:
+            printf("You choose Other\n");
+            strcpy(expense.category, "Other");
+            break;
+        default:
+            printf("Invalid choice\n");
+            break;
+        }
+    } while (choice > 5 || invalidChoice == 1);
+}
+
+void printCategoryChoiceMenu()
+{
     printf("Choose category\n");
     printf("1. Food\n");
     printf("2. Transportation\n");
@@ -169,49 +222,24 @@ void printCategoryChoice() {
     printf("4. Entertainment\n");
     printf("5. Other\n");
     printf("Your choice:");
-    int choice;
-    scanf("%d", &choice);
-    switch (choice)
-    {
-    case 1:
-        printf("You choose Food\n");
-        strcpy(expense.category, "Food");
-        break;
-    case 2:
-        printf("You choose Transportation\n");
-        strcpy(expense.category, "Transportation");
-        break;
-    case 3:
-        printf("You choose Housing\n");
-        strcpy(expense.category, "Housing");
-        break;
-    case 4:
-        printf("You choose Entertainment\n");
-        strcpy(expense.category, "Entertainment");
-        break;
-    case 5:
-        printf("You choose Other\n");
-        strcpy(expense.category, "Other");
-        break;
-    default:
-        printf("Invalid choice\n");
-        break;
-    }
 }
 
-void printDescription() {
+void printDescription()
+{
     printf("Enter expense description: ");
     // scanf("%s", expense.description);
     // fgets(expense.description, sizeof(expense.description), stdin);
     scanf(" %[^\n]s", expense.description);
 }
 
-char *getDate() {
+char *getDate()
+{
     time_t rawtime;
     struct tm *info;
     char *buffer = (char *)malloc(80 * sizeof(char)); // Allocate dynamic memory
 
-    if (buffer == NULL) {
+    if (buffer == NULL)
+    {
         fprintf(stderr, "Memory allocation error\n");
         exit(EXIT_FAILURE);
     }
@@ -223,22 +251,32 @@ char *getDate() {
     return buffer;
 }
 
-char *chooseDate() {
+char *chooseDate()
+{
     char *date = (char *)malloc(80 * sizeof(char)); // Allocate dynamic memory
+    char tempDate[11];
+    const char *prompt = "Enter date (DD/MM/YYYY): ";
 
-    if (date == NULL) {
+    if (date == NULL)
+    {
         fprintf(stderr, "Memory allocation error\n");
         exit(EXIT_FAILURE);
     }
 
-    printf("Enter date (dd/mm/yyyy): ");
-    scanf("%s", date);
+    do
+    {
+        printf("%s", prompt);
+        scanf("%s", tempDate);
+    } while (!validateDate(tempDate));
+
+    snprintf(date, 11, "%s", tempDate);
 
     return date;
     free(date);
 }
 
-int saveExpense() {
+int saveExpense()
+{
     // cJSON *json = cJSON_CreateObject();
     // cJSON_AddStringToObject(json, "Date", expense.date);
     // cJSON_AddStringToObject(json, "Category", expense.category);
@@ -262,15 +300,22 @@ int saveExpense() {
     return save(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
 }
 
-void separateDate(char input[]) {
+void separateDate(char input[])
+{
     char *token = strtok(input, "/");
     int count = 0;
-    while (token != NULL) {
-        if (count == 0) {
+    while (token != NULL)
+    {
+        if (count == 0)
+        {
             strcpy(date.day, token);
-        } else if (count == 1) {
+        }
+        else if (count == 1)
+        {
             strcpy(date.month, token);
-        } else if (count == 2) {
+        }
+        else if (count == 2)
+        {
             strcpy(date.year, token);
         }
         token = strtok(NULL, "/");
