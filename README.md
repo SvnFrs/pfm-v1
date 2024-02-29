@@ -35,3 +35,6 @@ gcc main.c save.o table.o listExpenses.o statisticizeExpenses.o -o main -lcjson
 - [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
 - [x] Add the ability to list all the expenses in the data file for a specific period.
 - [x] List statistics for the expenses in the data file by month.
+- [ ] Enter expenses validation.
+- [ ] Statisticize expenses validation.
+- [ ] Abbreviate the ouput data.
