@@ -176,9 +176,23 @@ void printMonthlyExpenses()
                     cJSON *monthObj = cJSON_GetObjectItem(yearObj, monthStr);
                     if (monthObj != NULL)
                     {
-                        calculateColumnWidths(7, columnNames, columnWidths);
-                        createTableHeader(7, columnNames, columnWidths);
-                        createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
+                        // calculateColumnWidths(7, columnNames, columnWidths);
+                        // createTableHeader(7, columnNames, columnWidths);
+                        // createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
+
+                        bool expensesFound = createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
+
+                        if (expensesFound)
+                        {
+                            calculateColumnWidths(7, columnNames, columnWidths);
+                            createTableHeader(7, columnNames, columnWidths);
+                            createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
+                            cJSON_Delete(root);
+                        }
+                        else
+                        {
+                            printf("No expenses available in this month.\n");
+                        }
                     }
                     else
                     {
@@ -207,7 +221,7 @@ void printMonthlyExpenses()
     }
 }
 
-void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
+bool createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
 {
     // char money[80];
     int padding = 6;
@@ -219,6 +233,8 @@ void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
         spaces[i] = ' ';
     }
     spaces[padding] = '\0';
+
+    bool expensesPrinted = false; // Initialize a flag
 
     cJSON *dayObj = monthObj->child;
     while (dayObj != NULL)
@@ -265,11 +281,15 @@ void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
 
             createTableSeparator(7, columnWidths);
 
+            expensesPrinted = true; // Set the flag to true
+
             expenseObj = expenseObj->next;
         }
 
         dayObj = dayObj->next;
     }
+
+    return expensesPrinted; // Return the flag
 }
 
 char *abbreviateMoney(long amount)
@@ -763,40 +783,6 @@ bool validateEndDateVSStartDate()
     }
     return true;
 }
-
-// bool validateDate(char date[]) {
-//     int day, month, year;
-//     char *token = strtok(date, "/");
-//     int count = 0;
-//     while (token != NULL) {
-//         if (count == 0) {
-//             day = atoi(token);
-//         } else if (count == 1) {
-//             month = atoi(token);
-//         } else if (count == 2) {
-//             year = atoi(token);
-//         }
-//         token = strtok(NULL, "/");
-//         count++;
-//     }
-
-//     if (day < 1 || day > 31) {
-//         printf("Invalid day.\n");
-//         return false;
-//     }
-
-//     if (month < 1 || month > 12) {
-//         printf("Invalid month.\n");
-//         return false;
-//     }
-
-//     if (year < 1970 || year > 2024) {
-//         printf("Invalid year.\n");
-//         return false;
-//     }
-
-//     return true;
-// }
 
 bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
 {
