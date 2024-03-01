@@ -14,17 +14,23 @@ struct Date
     char year[80];
 } startDate, endDate;
 
-int getChoice(const char* prompt, int min, int max) {
+int getChoice(const char *prompt, int min, int max)
+{
     int choice;
     int isValidChoice = 0;
 
-    do {
+    do
+    {
         printf("%s", prompt);
-        if (scanf("%d", &choice) != 1 || getchar() != '\n' || choice < min || choice > max) {
+        if (scanf("%d", &choice) != 1 || getchar() != '\n' || choice < min || choice > max)
+        {
             printf("Invalid input. Please enter a valid choice between %d and %d.\n", min, max);
             isValidChoice = 0;
-            while (getchar() != '\n'); // Clear the input buffer
-        } else {
+            while (getchar() != '\n')
+                ; // Clear the input buffer
+        }
+        else
+        {
             isValidChoice = 1;
         }
     } while (!isValidChoice);
@@ -32,17 +38,23 @@ int getChoice(const char* prompt, int min, int max) {
     return choice;
 }
 
-int getInput(const char* prompt, int min, int max) {
+int getInput(const char *prompt, int min, int max)
+{
     int value;
     int isValidInput = 0;
 
-    do {
+    do
+    {
         printf("%s", prompt);
-        if (scanf("%d", &value) != 1 || value < min || value > max) {
+        if (scanf("%d", &value) != 1 || value < min || value > max)
+        {
             printf("Invalid input. Please enter a valid value between %d and %d.\n", min, max);
             isValidInput = 0;
-            while (getchar() != '\n'); // Clear the input buffer
-        } else {
+            while (getchar() != '\n')
+                ; // Clear the input buffer
+        }
+        else
+        {
             isValidInput = 1;
         }
     } while (!isValidInput);
@@ -50,15 +62,17 @@ int getInput(const char* prompt, int min, int max) {
     return value;
 }
 
-int yearInput() {
-    const char* prompt = "Enter the year: ";
+int yearInput()
+{
+    const char *prompt = "Enter the year: ";
     int minYear = 1970;
     int maxYear = 2024;
     return getInput(prompt, minYear, maxYear);
 }
 
-int monthInput() {
-    const char* prompt = "Enter the month: ";
+int monthInput()
+{
+    const char *prompt = "Enter the month: ";
     int minMonth = 1;
     int maxMonth = 12;
     return getInput(prompt, minMonth, maxMonth);
@@ -235,7 +249,7 @@ void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
             {
                 strcpy(description, descriptionObj->valuestring);
             }
-            
+
             strcpy(money, abbreviateMoney(amount));
             // printf("%s\n", money);
 
@@ -274,7 +288,6 @@ char *abbreviateMoney(long amount)
 
     return result;
 }
-
 
 void printQuarterlyExpenses()
 {
@@ -383,9 +396,9 @@ void createTableBodyQuarterly(cJSON *yearObj, int startMonth, int endMonth, int 
     }
 }
 
-
-int printQuarterlyChoice() {
-    const char* prompt = "Choose a quarter:\n1. Q1\n2. Q2\n3. Q3\n4. Q4\nYour choice: ";
+int printQuarterlyChoice()
+{
+    const char *prompt = "Choose a quarter:\n1. Q1\n2. Q2\n3. Q3\n4. Q4\nYour choice: ";
     int minChoice = 1;
     int maxChoice = 4;
     return getChoice(prompt, minChoice, maxChoice);
@@ -562,13 +575,16 @@ void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int c
                         strcpy(description, descriptionObj->valuestring);
                     }
 
+                    strcpy(money, abbreviateMoney(amount));
+                    // printf("%s\n", money);
+
                     // Print the expense information in the table
-                    printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*ld%s|%*s%s|%*s%s|\n",
+                    printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|\n",
                            columnWidths[0], year, spaces,
                            columnWidths[1], month, spaces,
                            columnWidths[2], day, spaces,
                            columnWidths[3], ID, spaces,
-                           columnWidths[4], amount, spaces,
+                           columnWidths[4], money, spaces,
                            columnWidths[5], category, spaces,
                            columnWidths[6], description, spaces);
 
@@ -648,11 +664,13 @@ void printCustomExpenses()
     }
 }
 
-void getStartDateInput() {
-    const char* prompt = "Enter the start date (DD/MM/YYYY): ";
+void getStartDateInput()
+{
+    const char *prompt = "Enter the start date (DD/MM/YYYY): ";
     char startDatee[11];
-    
-    do {
+
+    do
+    {
         printf("%s", prompt);
         scanf("%s", startDatee);
     } while (!validateDate(startDatee));
@@ -660,11 +678,13 @@ void getStartDateInput() {
     // separateSEDate(startDatee, 1);
 }
 
-void getEndDateInput() {
-    const char* prompt = "Enter the end date (DD/MM/YYYY): ";
+void getEndDateInput()
+{
+    const char *prompt = "Enter the end date (DD/MM/YYYY): ";
     char endDatee[11];
-    
-    do {
+
+    do
+    {
         printf("%s", prompt);
         scanf("%s", endDatee);
     } while (!validateDate(endDatee) || !validateEndDateVSStartDate());
@@ -672,15 +692,22 @@ void getEndDateInput() {
     // separateSEDate(endDatee, 2);
 }
 
-void separateStartDate(char date[]) {
+void separateStartDate(char date[])
+{
     char *token = strtok(startDate.day, "/");
     int count = 0;
-    while (token != NULL) {
-        if (count == 0) {
+    while (token != NULL)
+    {
+        if (count == 0)
+        {
             strcpy(startDate.day, token);
-        } else if (count == 1) {
+        }
+        else if (count == 1)
+        {
             strcpy(startDate.month, token);
-        } else if (count == 2) {
+        }
+        else if (count == 2)
+        {
             strcpy(startDate.year, token);
         }
         token = strtok(NULL, "/");
@@ -688,15 +715,22 @@ void separateStartDate(char date[]) {
     }
 }
 
-void separateEndDate(char date[]) {
+void separateEndDate(char date[])
+{
     char *token = strtok(endDate.day, "/");
     int count = 0;
-    while (token != NULL) {
-        if (count == 0) {
+    while (token != NULL)
+    {
+        if (count == 0)
+        {
             strcpy(endDate.day, token);
-        } else if (count == 1) {
+        }
+        else if (count == 1)
+        {
             strcpy(endDate.month, token);
-        } else if (count == 2) {
+        }
+        else if (count == 2)
+        {
             strcpy(endDate.year, token);
         }
         token = strtok(NULL, "/");
@@ -704,16 +738,24 @@ void separateEndDate(char date[]) {
     }
 }
 
-bool validateEndDateVSStartDate() {
-    if (strcmp(endDate.year, startDate.year) < 0) {
+bool validateEndDateVSStartDate()
+{
+    if (strcmp(endDate.year, startDate.year) < 0)
+    {
         printf("End date cannot be earlier than start date.\n");
         return false;
-    } else if (strcmp(endDate.year, startDate.year) == 0) {
-        if (strcmp(endDate.month, startDate.month) < 0) {
+    }
+    else if (strcmp(endDate.year, startDate.year) == 0)
+    {
+        if (strcmp(endDate.month, startDate.month) < 0)
+        {
             printf("End date cannot be earlier than start date.\n");
             return false;
-        } else if (strcmp(endDate.month, startDate.month) == 0) {
-            if (strcmp(endDate.day, startDate.day) < 0) {
+        }
+        else if (strcmp(endDate.month, startDate.month) == 0)
+        {
+            if (strcmp(endDate.day, startDate.day) < 0)
+            {
                 printf("End date cannot be earlier than start date.\n");
                 return false;
             }
