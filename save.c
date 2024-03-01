@@ -1,30 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <stdbool.h>
-#include <cjson/cJSON.h>
-
-// Function to check if a year is a leap year
-bool isLeapYear(int year) {
-    if (year % 4 != 0) {
-        return false;
-    } else if (year % 100 != 0) {
-        return true;
-    } else if (year % 400 != 0) {
-        return false;
-    } else {
-        return true;
-    }
-}
-
-// Function to get the last day of a month in a specific year
-int getLastDayOfMonth(int month, int year) {
-    int lastDays[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    if (month == 2 && isLeapYear(year)) {
-        return 29;
-    }
-    return lastDays[month - 1];
-}
+#include "save.h"
 
 // Function to generate a skeleton of days for a month
 void generateSkeletonDays(cJSON *monthObj, int lastDay) {
