@@ -167,7 +167,6 @@ void printExpenseAmount()
 
 int printCategoryChoice()
 {
-
     int choice, invalidChoice;
     do
     {
@@ -183,7 +182,7 @@ int printCategoryChoice()
                 ;
             continue;
         }
-        scanf("%d", &choice);
+
         switch (choice)
         {
         case 1:
@@ -226,10 +225,31 @@ void printCategoryChoiceMenu()
 
 void printDescription()
 {
-    printf("Enter expense description: ");
-    // scanf("%s", expense.description);
-    // fgets(expense.description, sizeof(expense.description), stdin);
-    scanf(" %[^\n]s", expense.description);
+    const char *prompt = "Enter expense description: ";
+    char *temp = (char *)malloc(80 * sizeof(char)); // Allocate dynamic memory
+
+    if (temp == NULL)
+    {
+        fprintf(stderr, "Memory allocation error\n");
+        exit(EXIT_FAILURE);
+    }
+
+    bool isValidDescription = false;
+
+    while (!isValidDescription)
+    {
+        printf("%s", prompt);
+        fgets(temp, 80, stdin);
+
+        // Remove trailing newline character
+        if (temp[strlen(temp) - 1] == '\n')
+            temp[strlen(temp) - 1] = '\0';
+
+        isValidDescription = checkDescription(temp);
+    }
+
+    strcpy(expense.description, temp);
+    free(temp);
 }
 
 char *getDate()

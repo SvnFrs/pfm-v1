@@ -33,3 +33,17 @@ bool validateDate(char date[]) {
 
     return true;
 }
+
+bool checkDescription(const char *input)
+{
+    // Check if the input is empty or contains only whitespace characters
+    for (int i = 0; i < strlen(input); i++)
+    {
+        if (input[i] != ' ' && input[i] != '\t')
+        {
+            return true;
+        }
+    }
+    printf("Description cannot be empty.\n");
+    return false;
+}

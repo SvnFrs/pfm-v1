@@ -5,3 +5,5 @@
 #include <cjson/cJSON.h>
 
 extern bool validateDate(char date[]);
+extern bool checkWhiteSpace(char input[]);
+extern bool checkDescription(const char *input);
