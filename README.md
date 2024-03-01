@@ -1,4 +1,4 @@
-# This  is my project to manage my expenses
+# This is my project to manage my expenses.
 
 for compiling the code, you need to have the cjson library installed on your machine.
 these are the commands to compile the code.
@@ -33,7 +33,10 @@ gcc main.c save.o table.o listExpenses.o statisticizeExpenses.o validate.o -o ma
 - [x] Auto generate the month and its days if not exists in the data.  
 - [x] List all the expenses in the data file with specific table format.
 - [x] Update table format to be more precise and clear.
-- [x] Create table method specific for the period of time.- [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
+- [x] Create table method specific for the period of time.
+<!-- - [ ] Add the ability to delete an expense from the data file. -->
+<!-- - [ ] Add the ability to update an expense from the data file. -->
+- [x] Add the ability to list all the expenses in the data file for a specific month / quarter / year.
 - [x] Add the ability to list all the expenses in the data file for a specific period.
 - [x] List statistics for the expenses in the data file by month.
 - [x] Enter expenses validation.
