@@ -81,6 +81,16 @@
 					"amount": 1,
 					"category": "Transportation",
 					"description": "a"
+				},
+				"ex2": {
+					"amount": 2,
+					"category": "Entertainment",
+					"description": "aaaaaaaaaaaaaaaa"
+				},
+				"ex3": {
+					"amount": 2,
+					"category": "Food",
+					"description": "aaaaaaaaaaaaaaaaaaaaaa"
 				}
 			},
 			"02": {},
