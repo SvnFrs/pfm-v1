@@ -8,8 +8,8 @@
 
 extern char *abbreviateMoney(long amount);
 extern char *abbreviateDescription(const char *description);
-extern int getChoice(const char* prompt, int min, int max);
-extern int getInput(const char* prompt, int min, int max);
+extern int getChoice(const char *prompt, int min, int max);
+extern int getInput(const char *prompt, int min, int max);
 extern int yearInput();
 extern int monthInput();
 extern int listExpenses();
@@ -26,7 +26,7 @@ extern void createTableBodyQuarterly(cJSON *yearObj, int startMonth, int endMont
 extern void createTableBodyYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[]);
 extern bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[]);
 extern void createTableSeparator(int columnCount, int columnWidths[]);
-extern int* calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[]);
+extern int *calculateColumnWidths(int columnCount, char *columnNames[], int columnWidths[]);
 extern int printQuarterlyChoice();
 extern void separateStartDate();
 extern void separateEndDate();

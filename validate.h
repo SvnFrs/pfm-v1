@@ -9,3 +9,4 @@ extern int getLastDayOfMonth(int month, int year);
 extern bool validateDate(char date[]);
 extern bool checkWhiteSpace(char input[]);
 extern bool checkDescription(const char *input);
+extern bool checkDataFileExists();

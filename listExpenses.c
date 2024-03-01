@@ -79,7 +79,18 @@ int monthInput()
 }
 
 int listExpenses()
-{
+{   
+    // if (system("test -f data/Cache.json") == 0)
+    // {
+    //     printf("No data available.\n");
+    //     return 1;
+    // }
+    
+    if (!checkDataFileExists()) {
+        printf("\n\n");
+        return 0;
+    }
+
     system("./new.sh");
     int choice, invalidChoice;
 

@@ -102,3 +102,17 @@ bool checkDescription(const char *input)
     printf("Description cannot be empty.\n");
     return false;
 }
+
+bool checkDataFileExists()
+{
+    FILE *fp = fopen("data/Cache.json", "r");
+    FILE *temp = fopen("data/Expenses.json", "r");
+    if (fp != NULL && temp != NULL)
+    {
+        fclose(fp);
+        return true;
+    }
+    
+    printf("Error: The data file does not exist. Please enter expenses first.\n");
+    return false;
+}
