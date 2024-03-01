@@ -12,7 +12,6 @@
 void printMenu();
 int startProgram();
 void enterExpenses();
-// void listExpenses();
 int printDateChoice();
 void printDateChoiceMenu();
 void printExpenseAmount();
@@ -43,9 +42,11 @@ const char *months[12] = {"January", "February", "March", "April", "May", "June"
 
 int main()
 {
+    // To start the program
     startProgram();
 }
 
+// Function to start the program
 int startProgram()
 {
     int choice, invalidChoice, result;
@@ -98,6 +99,7 @@ int startProgram()
     return 0;
 }
 
+// Function to print the main menu
 void printMenu()
 {
     printf("Personal Finance Management\n");
@@ -108,6 +110,7 @@ void printMenu()
     printf("5. Exit\n");
 }
 
+// Function to enter expenses
 void enterExpenses()
 {
     printDateChoice();
@@ -119,15 +122,12 @@ void enterExpenses()
     printf("Expense category: %s\n", expense.category);
     printf("Expense description: %s\n", expense.description);
     separateDate(expense.date);
-    // printf("Day: %s\n", date.day);
-    // printf("Month: %s\n", date.month);
-    // printf("Year: %s\n", date.year);
-    // saveExpense();
-    // testSave(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
     int result = saveExpense();
     result == 0 ? printf("Expense saved\n") : printf("Error saving expense\n");
     startProgram();
 }
+
+// Function to print the date choice prompt
 int printDateChoice()
 {
     int choice, invalidChoice;
@@ -171,6 +171,8 @@ int printDateChoice()
     } while (choice > 2 || invalidChoice == 1);
 }
 
+
+// Function to print the date choice menu
 void printDateChoiceMenu()
 {
     printf("Choose date\n");
@@ -179,6 +181,7 @@ void printDateChoiceMenu()
     printf("Your choice:");
 }
 
+// Function to print the expense amount prompt
 void printExpenseAmount()
 {
     const char *prompt = "Enter expense amount: ";
@@ -186,6 +189,7 @@ void printExpenseAmount()
     expense.amount = amount;
 }
 
+// Function to print the category choice prompt
 int printCategoryChoice()
 {
     int choice, invalidChoice;
@@ -233,6 +237,7 @@ int printCategoryChoice()
     } while (choice > 5 || invalidChoice == 1);
 }
 
+// Function to print the category choice menu
 void printCategoryChoiceMenu()
 {
     printf("Choose category\n");
@@ -244,6 +249,7 @@ void printCategoryChoiceMenu()
     printf("Your choice:");
 }
 
+// Function to print the expense description prompt
 void printDescription()
 {
     const char *prompt = "Enter expense description: ";
@@ -273,6 +279,7 @@ void printDescription()
     free(temp);
 }
 
+// Function to get the current date
 char *getDate()
 {
     time_t rawtime;
@@ -292,6 +299,7 @@ char *getDate()
     return buffer;
 }
 
+// Function to choose a date
 char *chooseDate()
 {
     char *date = (char *)malloc(80 * sizeof(char)); // Allocate dynamic memory
@@ -316,31 +324,13 @@ char *chooseDate()
     free(date);
 }
 
+// Function to save the expense
 int saveExpense()
 {
-    // cJSON *json = cJSON_CreateObject();
-    // cJSON_AddStringToObject(json, "Date", expense.date);
-    // cJSON_AddStringToObject(json, "Category", expense.category);
-    // cJSON_AddNumberToObject(json, "Amount", expense.amount);
-    // char *json_str = cJSON_Print(json);
-
-    // // write the JSON string to a file
-    // FILE *fp = fopen("data/expenses.json", "w");
-    // if (fp == NULL)
-    // {
-    //     printf("Error: Unable to open the file.\n");
-    //     return 1;
-    // }
-    // printf("%s\n", json_str);
-    // fputs(json_str, fp);
-    // fclose;
-    // // free the JSON string and cJSON object
-    // cJSON_free(json_str);
-    // cJSON_Delete(json);
-    // return 0;
     return save(date.day, date.month, date.year, expense.category, expense.description, expense.amount);
 }
 
+// Function to separate the date
 void separateDate(char input[])
 {
     char *token = strtok(input, "/");
@@ -363,47 +353,3 @@ void separateDate(char input[])
         count++;
     }
 }
-
-// void listExpenses() {
-//     printPeriodChoice();
-// }
-
-// void printPeriodChoice() {
-//     printf("Choose expense period\n");
-//     printf("1. Monthly\n");
-//     printf("2. Yearly\n");
-//     printf("3. All\n");
-//     printf("4. Custom\n");
-//     printf("Your choice:");
-//     int choice;
-//     do
-//     {
-//         if (scanf("%d", &choice) != 1)
-//         {
-//             // If scanf fails to read an integer
-//             printf("Invalid input. Please enter a valid integer.\n");
-//             // Clear the input buffer to prevent an infinite loop on invalid input
-//             while (getchar() != '\n')
-//                 ;
-//             continue;
-//         }
-//     } while (choice > 4);
-//     switch (choice)
-//     {
-//     case 1:
-//         printf("You choose Monthly\n");
-//         break;
-//     case 2:
-//         printf("You choose Yearly\n");
-//         break;
-//     case 3:
-//         printf("You choose All\n");
-//         break;
-//     case 4:
-//         printf("You choose Custom\n");
-//         break;
-//     default:
-//         printf("Invalid choice\n");
-//         break;
-//     }
-// }

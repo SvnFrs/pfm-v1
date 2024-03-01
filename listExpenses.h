@@ -7,6 +7,7 @@
 #include "validate.h"
 
 extern char *abbreviateMoney(long amount);
+extern char *abbreviateDescription(const char *description);
 extern int getChoice(const char* prompt, int min, int max);
 extern int getInput(const char* prompt, int min, int max);
 extern int yearInput();

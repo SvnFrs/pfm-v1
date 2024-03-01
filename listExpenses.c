@@ -1,9 +1,9 @@
 #include "listExpenses.h"
 
 // Default column names and widths
-char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "    Category", "Description"};
+char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "    Category", "  Description"};
 int columnWidths[7];
-char year[80], month[80], day[80], ID[80], category[80], description[80], money[80];
+char year[80], month[80], day[80], ID[80], category[80], description[80], money[80], des[80];
 long amount;
 
 // Struct to store the start and end date
@@ -82,7 +82,6 @@ int listExpenses()
 {
     system("./new.sh");
     int choice, invalidChoice;
-    // scanf("%d", &choice);
 
     do
     {
@@ -139,11 +138,6 @@ void printListExpensesMenu()
 
 void printMonthlyExpenses()
 {
-    // int year, month;
-    // printf("Enter the year: ");
-    // scanf("%d", &year);
-    // printf("Enter the month: ");
-    // scanf("%d", &month);
     int year = yearInput();
     int month = monthInput();
 
@@ -176,10 +170,6 @@ void printMonthlyExpenses()
                     cJSON *monthObj = cJSON_GetObjectItem(yearObj, monthStr);
                     if (monthObj != NULL)
                     {
-                        // calculateColumnWidths(7, columnNames, columnWidths);
-                        // createTableHeader(7, columnNames, columnWidths);
-                        // createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
-
                         bool expensesFound = createTableBodyMonthly(yearObj, monthObj, 7, columnNames, columnWidths);
 
                         if (expensesFound)
@@ -223,7 +213,6 @@ void printMonthlyExpenses()
 
 bool createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
 {
-    // char money[80];
     int padding = 6;
     // calculate spaces based on padding
     char spaces[padding + 1];
@@ -267,7 +256,6 @@ bool createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
             }
 
             strcpy(money, abbreviateMoney(amount));
-            // printf("%s\n", money);
 
             // Print the expense information in the table
             printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|\n",
@@ -290,23 +278,6 @@ bool createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, ch
     }
 
     return expensesPrinted; // Return the flag
-}
-
-char *abbreviateMoney(long amount)
-{
-    const char *suffixes[] = {"", "k", "m", "b"};
-    int index = 0;
-
-    while (amount >= 1000 && index < sizeof(suffixes) / sizeof(suffixes[0]) - 1)
-    {
-        amount /= 1000;
-        index++;
-    }
-
-    char *result = (char *)malloc(10 * sizeof(char));
-    snprintf(result, 10, "%ld%s", amount, suffixes[index]);
-
-    return result;
 }
 
 void printQuarterlyExpenses()
@@ -426,10 +397,6 @@ int printQuarterlyChoice()
 
 void printYearlyExpenses()
 {
-    // int year;
-    // printf("Enter the year: ");
-    // scanf("%d", &year);
-
     int year = yearInput();
 
     // Load and parse the JSON data
@@ -596,7 +563,7 @@ void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int c
                     }
 
                     strcpy(money, abbreviateMoney(amount));
-                    // printf("%s\n", money);
+                    strcpy(des, abbreviateDescription(description));
 
                     // Print the expense information in the table
                     printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|\n",
@@ -606,7 +573,7 @@ void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int c
                            columnWidths[3], ID, spaces,
                            columnWidths[4], money, spaces,
                            columnWidths[5], category, spaces,
-                           columnWidths[6], description, spaces);
+                           columnWidths[6], des, spaces);
 
                     createTableSeparator(7, columnWidths);
 
@@ -625,11 +592,6 @@ void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int c
 
 void printCustomExpenses()
 {
-    // char startDatee[11], endDatee[11];
-    // printf("Enter the start date (DD-MM-YYYY): ");
-    // scanf("%s", startDatee);
-    // printf("Enter the end date (DD-MM-YYYY): ");
-    // scanf("%s", endDatee);
     getStartDateInput();
     getEndDateInput();
 
@@ -658,8 +620,6 @@ void printCustomExpenses()
                 {
                     calculateColumnWidths(7, columnNames, columnWidths);
                     createTableHeader(7, columnNames, columnWidths);
-                    // separateSEDate(startDatee, 1);
-                    // separateSEDate(endDatee, 2);
                     createTableBodyCustom(root, 7, columnNames, columnWidths);
                     cJSON_Delete(root);
                 }
@@ -684,6 +644,93 @@ void printCustomExpenses()
     }
 }
 
+bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
+{
+    int padding = 6;
+    char spaces[padding + 1];
+    for (int i = 0; i < padding; i++)
+    {
+        spaces[i] = ' ';
+    }
+    spaces[padding] = '\0';
+
+    cJSON *yearObj = root->child;
+
+    bool expensesPrinted = false; // Initialize a flag
+
+    while (yearObj != NULL)
+    {
+        if (strcmp(yearObj->string, startDate.year) >= 0 && strcmp(yearObj->string, endDate.year) <= 0)
+        {
+            cJSON *monthObj = yearObj->child;
+            while (monthObj != NULL)
+            {
+                if (strcmp(monthObj->string, startDate.month) >= 0 && strcmp(monthObj->string, endDate.month) <= 0)
+                {
+                    cJSON *dayObj = monthObj->child;
+                    while (dayObj != NULL)
+                    {
+                        if (strcmp(dayObj->string, startDate.day) >= 0 && strcmp(dayObj->string, endDate.day) <= 0)
+                        {
+                            cJSON *expenseObj = dayObj->child;
+                            while (expenseObj != NULL)
+                            {
+                                // Extract the expense information
+                                strcpy(year, yearObj->string);
+                                strcpy(month, monthObj->string);
+                                strcpy(day, dayObj->string);
+                                strcpy(ID, expenseObj->string);
+
+                                cJSON *amountObj = cJSON_GetObjectItem(expenseObj, "amount");
+                                if (amountObj != NULL)
+                                {
+                                    amount = amountObj->valueint;
+                                }
+
+                                cJSON *categoryObj = cJSON_GetObjectItem(expenseObj, "category");
+                                if (categoryObj != NULL)
+                                {
+                                    strcpy(category, categoryObj->valuestring);
+                                }
+
+                                cJSON *descriptionObj = cJSON_GetObjectItem(expenseObj, "description");
+                                if (descriptionObj != NULL)
+                                {
+                                    strcpy(description, descriptionObj->valuestring);
+                                }
+
+                                strcpy(money, abbreviateMoney(amount));
+
+                                // Print the expense information in the table
+                                printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|%*s%s|\n",
+                                       columnWidths[0], year, spaces,
+                                       columnWidths[1], month, spaces,
+                                       columnWidths[2], day, spaces,
+                                       columnWidths[3], ID, spaces,
+                                       columnWidths[4], amount, spaces,
+                                       columnWidths[5], category, spaces,
+                                       columnWidths[6], description, spaces);
+                                createTableSeparator(7, columnWidths);
+
+                                expensesPrinted = true; // Set the flag to true
+
+                                expenseObj = expenseObj->next;
+                            }
+                        }
+
+                        dayObj = dayObj->next;
+                    }
+                }
+
+                monthObj = monthObj->next;
+            }
+        }
+
+        yearObj = yearObj->next;
+    }
+    return expensesPrinted; // Return the flag
+}
+
 void getStartDateInput()
 {
     const char *prompt = "Enter the start date (DD/MM/YYYY): ";
@@ -694,8 +741,6 @@ void getStartDateInput()
         printf("%s", prompt);
         scanf("%s", startDatee);
     } while (!validateDate(startDatee));
-
-    // separateSEDate(startDatee, 1);
 }
 
 void getEndDateInput()
@@ -708,8 +753,6 @@ void getEndDateInput()
         printf("%s", prompt);
         scanf("%s", endDatee);
     } while (!validateDate(endDatee) || !validateEndDateVSStartDate());
-
-    // separateSEDate(endDatee, 2);
 }
 
 void separateStartDate(char date[])
@@ -784,87 +827,37 @@ bool validateEndDateVSStartDate()
     return true;
 }
 
-bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
+char *abbreviateMoney(long amount)
 {
-    int padding = 6;
-    char spaces[padding + 1];
-    for (int i = 0; i < padding; i++)
+    const char *suffixes[] = {"", "k", "m", "b"};
+    int index = 0;
+
+    while (amount >= 1000 && index < sizeof(suffixes) / sizeof(suffixes[0]) - 1)
     {
-        spaces[i] = ' ';
+        amount /= 1000;
+        index++;
     }
-    spaces[padding] = '\0';
 
-    cJSON *yearObj = root->child;
+    char *result = (char *)malloc(10 * sizeof(char));
+    snprintf(result, 10, "%ld%s", amount, suffixes[index]);
 
-    bool expensesPrinted = false; // Initialize a flag
+    return result;
+}
 
-    while (yearObj != NULL)
+char *abbreviateDescription(const char *description)
+{
+    size_t descriptionLength = strlen(description);
+
+    if (descriptionLength <= 16)
     {
-        if (strcmp(yearObj->string, startDate.year) >= 0 && strcmp(yearObj->string, endDate.year) <= 0)
-        {
-            cJSON *monthObj = yearObj->child;
-            while (monthObj != NULL)
-            {
-                if (strcmp(monthObj->string, startDate.month) >= 0 && strcmp(monthObj->string, endDate.month) <= 0)
-                {
-                    cJSON *dayObj = monthObj->child;
-                    while (dayObj != NULL)
-                    {
-                        if (strcmp(dayObj->string, startDate.day) >= 0 && strcmp(dayObj->string, endDate.day) <= 0)
-                        {
-                            cJSON *expenseObj = dayObj->child;
-                            while (expenseObj != NULL)
-                            {
-                                // Extract the expense information
-                                strcpy(year, yearObj->string);
-                                strcpy(month, monthObj->string);
-                                strcpy(day, dayObj->string);
-                                strcpy(ID, expenseObj->string);
-
-                                cJSON *amountObj = cJSON_GetObjectItem(expenseObj, "amount");
-                                if (amountObj != NULL)
-                                {
-                                    amount = amountObj->valueint;
-                                }
-
-                                cJSON *categoryObj = cJSON_GetObjectItem(expenseObj, "category");
-                                if (categoryObj != NULL)
-                                {
-                                    strcpy(category, categoryObj->valuestring);
-                                }
-
-                                cJSON *descriptionObj = cJSON_GetObjectItem(expenseObj, "description");
-                                if (descriptionObj != NULL)
-                                {
-                                    strcpy(description, descriptionObj->valuestring);
-                                }
-
-                                // Print the expense information in the table
-                                printf("|%*s%s|%*s%s|%*s%s|%*s%s|%*ld%s|%*s%s|%*s%s|\n",
-                                       columnWidths[0], year, spaces,
-                                       columnWidths[1], month, spaces,
-                                       columnWidths[2], day, spaces,
-                                       columnWidths[3], ID, spaces,
-                                       columnWidths[4], amount, spaces,
-                                       columnWidths[5], category, spaces,
-                                       columnWidths[6], description, spaces);
-                                createTableSeparator(7, columnWidths);
-
-                                expensesPrinted = true; // Set the flag to true
-
-                                expenseObj = expenseObj->next;
-                            }
-                        }
-
-                        dayObj = dayObj->next;
-                    }
-                }
-
-                monthObj = monthObj->next;
-            }
-        }
-
-        yearObj = yearObj->next;
+        // No need to abbreviate, return a copy of the original description
+        return strdup(description);
     }
-    return expensesPrinted; // Return the flag
+    else
+    {
+        // Abbreviate the description
+        char *result = (char *)malloc(20 * sizeof(char));
+        snprintf(result, 17, "%.13s...", description);
+        return result;
+    }
 }
