@@ -14,6 +14,11 @@ func main() {
 	file, err := os.ReadFile("../data/Expenses.json")
 	if err != nil {
 		fmt.Println("Error reading file:", err)
+		// create a new file if it doesn't exist
+		_, err = os.Create("../data/Expenses.json")
+		if err != nil {
+			fmt.Println("Error creating file:", err)
+		}
 		return
 	}
 
@@ -52,5 +57,5 @@ func main() {
 		return
 	}
 
-	fmt.Println("Sorting completed. Sorted data is stored in 'data/Cache.json'.")
+	// fmt.Println("Sorting completed. Sorted data is stored in 'data/Cache.json'.")
 }
