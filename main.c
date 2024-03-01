@@ -75,12 +75,12 @@ int startProgram()
         case 2:
             printf("List expenses\n");
             result = listExpenses();
-            result == 0 ? startProgram() : printf("Error listing expenses\n");
+            result == 0 ? startProgram() : printf("Error listing expenses\n"), startProgram();
             break;
         case 3:
             printf("Statistic total expenses\n");
             result = listStatistics();
-            result == 0 ? startProgram() : printf("Error listing statistics\n");
+            result == 0 ? startProgram() : printf("Error listing statistics\n"),  startProgram();
             break;
         case 4:
             printf("Options\n");

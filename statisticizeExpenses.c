@@ -3,16 +3,42 @@
 char *statisticColumnNames[] = {"Year", "Month", "Status", "Amount"};
 int statisticColumnWidths[7];
 char statisticYear[80], statisticMonth[80], statisticDay[80], statisticID[80], statisticStatus[80];
-char* exist = "X";
-char* notExist = "N/A";
+char *exist = "X";
+char *notExist = "N/A";
 long statisticAmount;
+
+int printYearChoices()
+{
+    int year, invalidYear;
+
+    do
+    {
+        invalidYear = 0;
+        printf("Enter the year: ");
+        if (scanf("%d", &year) != 1 || getchar() != '\n')
+        {
+            printf("Invalid input. Please enter a valid year.\n");
+            invalidYear = 1;
+        }
+        else if (year < 1970 || year > 2024)
+        {
+            printf("Invalid input. Please enter a valid year between 1970 and 2024.\n");
+            invalidYear = 1;
+        }
+        else
+        {
+            while (getchar() != '\n')
+                ;
+        }
+    } while (invalidYear);
+
+    return year;
+}
 
 int listStatistics()
 {
-    int year;
-    printf("List expenses statistics\n");
-    printf("Enter the year: ");
-    scanf("%d", &year);
+
+    int year = printYearChoices();
 
     // Load and parse the JSON data
     FILE *fp = fopen("data/Cache.json", "r");
