@@ -13,7 +13,8 @@ void printMenu();
 int startProgram();
 void enterExpenses();
 // void listExpenses();
-void printDateChoice();
+int printDateChoice();
+void printDateChoiceMenu();
 void printExpenseAmount();
 int printCategoryChoice();
 void printCategoryChoiceMenu();
@@ -127,42 +128,62 @@ void enterExpenses()
     result == 0 ? printf("Expense saved\n") : printf("Error saving expense\n");
     startProgram();
 }
-void printDateChoice()
+int printDateChoice()
 {
-    printf("What day should it be?\n");
-    printf("1. Today\n");
-    printf("2. Other\n");
-    printf("Your choice:");
-    int choice;
-    scanf("%d", &choice);
-    switch (choice)
-    {
-    case 1:
-        char *today = getDate();
+    int choice, invalidChoice;
 
-        printf("Today is %s\n", today);
-        strcpy(expense.date, today);
-        // snprintf(expense.date, sizeof(expense.date), "%s", today);
-        free(today);
-        break;
-    case 2:
-        char *notToday = chooseDate();
-        // printf("You choose %s\n", notToday);
-        strcpy(expense.date, notToday);
-        // snprintf(expense.date, sizeof(expense.date), "%s", notToday);
-        free(notToday);
-        break;
-    default:
-        printf("Invalid choice\n");
-        break;
-    }
+    do
+    {
+        invalidChoice = 0; // Reset the flag for each iteration
+        printDateChoiceMenu();
+        if (scanf("%d", &choice) != 1 || getchar() != '\n')
+        {
+            // If scanf fails to read an integer
+            printf("Invalid input. Please enter a valid choice.\n");
+            invalidChoice = 1;
+            // Clear the input buffer to prevent an infinite loop on invalid input
+            while (getchar() != '\n')
+                ;
+            continue;
+        }
+
+        switch (choice)
+        {
+        case 1:
+            char *today = getDate();
+
+            printf("Today is %s\n", today);
+            strcpy(expense.date, today);
+            // snprintf(expense.date, sizeof(expense.date), "%s", today);
+            free(today);
+            break;
+        case 2:
+            char *notToday = chooseDate();
+            // printf("You choose %s\n", notToday);
+            strcpy(expense.date, notToday);
+            // snprintf(expense.date, sizeof(expense.date), "%s", notToday);
+            free(notToday);
+            break;
+        default:
+            printf("Invalid choice\n");
+            break;
+        }
+    } while (choice > 2 || invalidChoice == 1);
+}
+
+void printDateChoiceMenu()
+{
+    printf("Choose date\n");
+    printf("1. Today\n");
+    printf("2. Not today\n");
+    printf("Your choice:");
 }
 
 void printExpenseAmount()
 {
-    printf("Enter expense amount: ");
-    scanf("%ld", &expense.amount);
-    printf("Expense amount: %ld\n", expense.amount);
+    const char *prompt = "Enter expense amount: ";
+    long amount = getInput(prompt, 1, 1000000000);
+    expense.amount = amount;
 }
 
 int printCategoryChoice()
