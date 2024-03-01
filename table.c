@@ -2,7 +2,7 @@
 
 void createTableHeader(int columnCount, char *columnNames[], int columnWidths[])
 {
-    int padding = 5;
+    int padding = 6;
     // calculate spaces based on padding
     char spaces[padding + 1];
 
@@ -56,7 +56,7 @@ void createTableSeparator(int columnCount, int columnWidths[])
     printf("+");
     for (int i = 0; i < columnCount; i++)
     {
-        for (int j = 0; j < columnWidths[i] + 5; j++)
+        for (int j = 0; j < columnWidths[i] + 6; j++)
         {
             printf("-");
         }

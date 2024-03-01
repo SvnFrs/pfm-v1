@@ -1,7 +1,7 @@
 #include "listExpenses.h"
 
 // Default column names and widths
-char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "Category", "Description"};
+char *columnNames[] = {"Year", "Month", "Day", "ID", "Amount", "    Category", "Description"};
 int columnWidths[7];
 char year[80], month[80], day[80], ID[80], category[80], description[80], money[80];
 long amount;
@@ -196,7 +196,7 @@ void printMonthlyExpenses()
 void createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
 {
     // char money[80];
-    int padding = 5;
+    int padding = 6;
     // calculate spaces based on padding
     char spaces[padding + 1];
 
@@ -360,7 +360,7 @@ void printQuarterlyExpenses()
 
 void createTableBodyQuarterly(cJSON *yearObj, int startMonth, int endMonth, int columnCount, char *columnNames[], int columnWidths[])
 {
-    int padding = 5;
+    int padding = 6;
     char spaces[padding + 1];
     for (int i = 0; i < padding; i++)
     {
@@ -451,7 +451,7 @@ void printYearlyExpenses()
 
 void createTableBodyYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[])
 {
-    int padding = 5;
+    int padding = 6;
     // calculate spaces based on padding
     char spaces[padding + 1];
 
@@ -517,7 +517,7 @@ void printAllExpenses()
 
 void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
 {
-    int padding = 5;
+    int padding = 6;
     // calculate spaces based on padding
     char spaces[padding + 1];
 
@@ -758,7 +758,7 @@ bool validateEndDateVSStartDate() {
 
 bool createTableBodyCustom(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])
 {
-    int padding = 5;
+    int padding = 6;
     char spaces[padding + 1];
     for (int i = 0; i < padding; i++)
     {
