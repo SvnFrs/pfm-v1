@@ -81,7 +81,7 @@ int startProgram()
         case 3:
             printf("Statistic total expenses\n");
             result = listStatistics();
-            result == 0 ? startProgram() : printf("Error listing statistics\n"),  startProgram();
+            result == 0 ? startProgram() : printf("Error listing statistics\n"), startProgram();
             break;
         case 4:
             printf("Options\n");
@@ -170,7 +170,6 @@ int printDateChoice()
         }
     } while (choice > 2 || invalidChoice == 1);
 }
-
 
 // Function to print the date choice menu
 void printDateChoiceMenu()

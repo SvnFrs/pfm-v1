@@ -1,25 +1,30 @@
 #include "save.h"
 
 // Function to generate a skeleton of days for a month
-void generateSkeletonDays(cJSON *monthObj, int lastDay) {
-    for (int day = 1; day <= lastDay; day++) {
+void generateSkeletonDays(cJSON *monthObj, int lastDay)
+{
+    for (int day = 1; day <= lastDay; day++)
+    {
         char dayStr[3];
         snprintf(dayStr, sizeof(dayStr), "%02d", day);
         cJSON_AddObjectToObject(monthObj, dayStr);
     }
 }
 
-int save(char day[80], char month[80], char year[80], char category[80], char description[80], long amount) {
+int save(char day[80], char month[80], char year[80], char category[80], char description[80], long amount)
+{
     cJSON *root = NULL;
     FILE *fp = fopen("data/Expenses.json", "r");
 
-    if (fp != NULL) {
+    if (fp != NULL)
+    {
         // Load existing JSON data from the file
         fseek(fp, 0, SEEK_END);
         long file_size = ftell(fp);
         fseek(fp, 0, SEEK_SET);
 
-        if (file_size > 0) {
+        if (file_size > 0)
+        {
             char *json_str = (char *)malloc(file_size + 1);
             fread(json_str, 1, file_size, fp);
             fclose(fp);
@@ -28,27 +33,34 @@ int save(char day[80], char month[80], char year[80], char category[80], char de
             root = cJSON_Parse(json_str);
             free(json_str);
 
-            if (root == NULL) {
+            if (root == NULL)
+            {
                 printf("Error: Failed to parse JSON data.\n");
                 return 1;
             }
-        } else {
+        }
+        else
+        {
             // The file is empty, create a new JSON structure
             root = cJSON_CreateObject();
         }
-    } else {
+    }
+    else
+    {
         // The file doesn't exist, create a new JSON structure
         root = cJSON_CreateObject();
     }
 
     // Check if the year/month/day structure already exists
     cJSON *yearObj = cJSON_GetObjectItem(root, year);
-    if (yearObj == NULL) {
+    if (yearObj == NULL)
+    {
         yearObj = cJSON_CreateObject();
         cJSON_AddItemToObject(root, year, yearObj);
 
         // Generate a skeleton of months for the year
-        for (int month = 1; month <= 12; month++) {
+        for (int month = 1; month <= 12; month++)
+        {
             char monthStr[3];
             snprintf(monthStr, sizeof(monthStr), "%02d", month);
             cJSON *monthObj = cJSON_CreateObject();
@@ -61,14 +73,16 @@ int save(char day[80], char month[80], char year[80], char category[80], char de
     }
 
     cJSON *monthObj = cJSON_GetObjectItem(yearObj, month);
-    if (monthObj == NULL) {
+    if (monthObj == NULL)
+    {
         printf("Error: The specified month '%s' does not exist.\n", month);
         cJSON_Delete(root);
         return 1;
     }
 
     cJSON *dayObj = cJSON_GetObjectItem(monthObj, day);
-    if (dayObj == NULL) {
+    if (dayObj == NULL)
+    {
         printf("Error: The specified day '%s' does not exist.\n", day);
         cJSON_Delete(root);
         return 1;
