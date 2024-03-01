@@ -209,6 +209,7 @@ void printMonthlyExpenses()
     {
         printf("Error: Failed to open the file.\n");
     }
+    printf("\n\n\n");
 }
 
 bool createTableBodyMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
@@ -360,6 +361,7 @@ void printQuarterlyExpenses()
     {
         printf("Error: Failed to open the file.\n");
     }
+    printf("\n\n\n");
 }
 
 void createTableBodyQuarterly(cJSON *yearObj, int startMonth, int endMonth, int columnCount, char *columnNames[], int columnWidths[])
@@ -447,6 +449,7 @@ void printYearlyExpenses()
     {
         printf("Error: Failed to open the file.\n");
     }
+    printf("\n\n\n");
 }
 
 void createTableBodyYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[])
@@ -513,6 +516,7 @@ void printAllExpenses()
     {
         printf("Error: Failed to open the file.\n");
     }
+    printf("\n\n\n");
 }
 
 void createTableBodyAll(cJSON *root, int columnCount, char *columnNames[], int columnWidths[])

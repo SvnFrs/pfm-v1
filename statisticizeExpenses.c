@@ -10,12 +10,13 @@ long statisticAmount;
 int printYearChoices()
 {
     int year, invalidYear;
+    char newline;
 
     do
     {
         invalidYear = 0;
         printf("Enter the year: ");
-        if (scanf("%d", &year) != 1 || getchar() != '\n')
+        if (scanf("%d%c", &year, &newline) != 2 || newline != '\n')
         {
             printf("Invalid input. Please enter a valid year.\n");
             invalidYear = 1;
@@ -24,11 +25,6 @@ int printYearChoices()
         {
             printf("Invalid input. Please enter a valid year between 1970 and 2024.\n");
             invalidYear = 1;
-        }
-        else
-        {
-            while (getchar() != '\n')
-                ;
         }
     } while (invalidYear);
 
@@ -88,11 +84,13 @@ int listStatistics()
     {
         printf("Error: Failed to open the file.\n");
     }
+    printf("\n\n\n");
+    return 0;
 }
 
 void statisticizeExpensesMonthly(cJSON *yearObj, cJSON *monthObj, int columnCount, char *columnNames[], int columnWidths[])
 {
-    int padding = 5;
+    int padding = 6;
     char spaces[padding + 1];
     for (int i = 0; i < padding; i++)
     {
@@ -135,7 +133,7 @@ void statisticizeExpensesMonthly(cJSON *yearObj, cJSON *monthObj, int columnCoun
 
 void statisticizeExpensesYearly(cJSON *yearObj, int columnCount, char *columnNames[], int columnWidths[])
 {
-    int padding = 5;
+    int padding = 6;
     char spaces[padding + 1];
     for (int i = 0; i < padding; i++)
     {

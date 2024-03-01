@@ -70,23 +70,22 @@ int startProgram()
         switch (choice)
         {
         case 1:
-            printf("Enter expenses\n");
+            printf("\n\n");
+            printf("-------- Enter expenses --------\n");
             enterExpenses();
             break;
         case 2:
-            printf("List expenses\n");
+            printf("\n\n");
+            printf("-------- List expenses --------\n");
             result = listExpenses();
-            result == 0 ? startProgram() : printf("Error listing expenses\n"), startProgram();
+            result == 0 ? startProgram() : printf("Error listing expenses\n\n"), startProgram();
             break;
         case 3:
-            printf("Statistic total expenses\n");
+            printf("-------- Statisticize expenses --------\n");
             result = listStatistics();
-            result == 0 ? startProgram() : printf("Error listing statistics\n"), startProgram();
+            result == 0 ? startProgram() : printf("Error listing statistics\n\n"), startProgram();
             break;
-        case 4:
-            printf("Options\n");
-            break;
-        case 5:
+        case 54:
             printf("Thank you for using our software\n");
             break;
         default:
@@ -94,7 +93,7 @@ int startProgram()
             invalidChoice = 1;
             break;
         }
-    } while (choice > 5 || invalidChoice == 1);
+    } while (choice > 4 || invalidChoice == 1);
 
     return 0;
 }
@@ -102,12 +101,14 @@ int startProgram()
 // Function to print the main menu
 void printMenu()
 {
-    printf("Personal Finance Management\n");
-    printf("1. Enter expenses\n");
-    printf("2. List expenses\n");
-    printf("3. Statistic total expenses\n");
-    printf("4. Options\n");
-    printf("5. Exit\n");
+    printf("+------- Personal Finance Management -------+\n");
+    printf("|                                           |\n");
+    printf("|\t1. Enter expenses                   |\n");
+    printf("|\t2. List expenses                    |\n");
+    printf("|\t3. Statisticize expenses            |\n");
+    printf("|\t4. Exit                             |\n");
+    printf("|                                           |\n");
+    printf("+-------------------------------------------+\n");
 }
 
 // Function to enter expenses

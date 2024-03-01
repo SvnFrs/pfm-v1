@@ -13,12 +13,7 @@ func main() {
 	// read the JSON data from the file
 	file, err := os.ReadFile("../data/Expenses.json")
 	if err != nil {
-		fmt.Println("Error reading file:", err)
-		// create a new file if it doesn't exist
-		_, err = os.Create("../data/Expenses.json")
-		if err != nil {
-			fmt.Println("Error creating file:", err)
-		}
+		// fmt.Println("Error reading file:", err)
 		return
 	}
 
@@ -26,7 +21,7 @@ func main() {
 	var expenses ExpenseData
 	err = json.Unmarshal(file, &expenses)
 	if err != nil {
-		fmt.Println("Error parsing JSON:", err)
+		// fmt.Println("Error parsing JSON:", err)
 		return
 	}
 
@@ -46,16 +41,16 @@ func main() {
 	// convert the sorted ExpenseData back to JSON
 	sortedJSON, err := json.MarshalIndent(sortedExpenses, "", "\t")
 	if err != nil {
-		fmt.Println("Error converting to JSON:", err)
+		// fmt.Println("Error converting to JSON:", err)
 		return
 	}
 
 	// ưrite the sorted JSON to a new file
 	err = os.WriteFile("../data/Cache.json", sortedJSON, os.ModePerm)
 	if err != nil {
-		fmt.Println("Error writing file:", err)
+		// fmt.Println("Error writing file:", err)
 		return
 	}
 
-	// fmt.Println("Sorting completed. Sorted data is stored in 'data/Cache.json'.")
+	fmt.Println("Sorting completed. Sorted data is stored in 'data/Cache.json'.")
 }
