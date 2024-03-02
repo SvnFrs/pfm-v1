@@ -1,4 +1,4 @@
-# This is my project to manage my expenses.
+# This is my project for a university course
 
 for compiling the code, you need to have the cjson library installed on your machine.
 these are the commands to compile the code.
